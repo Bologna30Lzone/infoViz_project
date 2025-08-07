@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confronto Serie Indice Base-100 per Station (2019+)</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { font-family: sans-serif; }
+    .axis path, .axis line { fill: none; stroke: #000; shape-rendering: crispEdges; }
+    .line { fill: none; stroke-width: 2px; }
+    .no-data { fill: red; font-size: 16px; }
+    .buttons { margin: 10px; }
+    .buttons button { margin-right: 5px; padding: 5px 10px; }
+    .active { background-color: #ddd; }
+    .legend { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <svg id="chart" width="960" height="500"></svg>
+  <div class="buttons">
+    <button data-res="monthly" class="active">Monthly</button>
+    <button data-res="quarterly">Quarterly</button>
+    <button data-res="yearly">Yearly</button>
+  </div>
+  <script>
+    const svg = d3.select('#chart'),
+          margin = {top: 20, right: 150, bottom: 50, left: 60},
+          width = +svg.attr('width') - margin.left - margin.right,
+          height = +svg.attr('height') - margin.top - margin.bottom;
+
+    const g = svg.append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const parseDate = d3.timeParse('%Y-%m-%d');
+    const formatMonth = d3.timeFormat('%Y-%m');
+    const parseMonth = d3.timeParse('%Y-%m');
+
+    let filteredData;
+    const xScale = d3.scaleTime().range([0, width]);
+    const yScale = d3.scaleLinear().range([height, 0]);
+    const xAxisGroup = g.append('g').attr('transform', `translate(0,${height})`);
+    const yAxisGroup = g.append('g');
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // Load CSV
+    d3.csv('bike-trimmed.csv').then(rawData => {
+      const data = rawData.map(d => ({
+        date: parseDate(d.data),
+        station: d.colonnina,
+        value: +d.totale
+      }));
+
+      filteredData = data.filter(d =>
+        d.date &&
+        d.date >= parseDate('2019-01-01') &&
+        d.value > 0
+      );
+
+      if (!filteredData.length) {
+        svg.append('text')
+          .attr('x', margin.left)
+          .attr('y', margin.top)
+          .attr('class', 'no-data')
+          .text('Nessun dato disponibile.');
+        return;
+      }
+
+      // Set color domain
+      const stations = Array.from(new Set(filteredData.map(d => d.station)));
+      color.domain(stations);
+
+      // Initial render
+      updateChart('monthly');
+
+      // Button events
+      d3.selectAll('.buttons button').on('click', function() {
+        const res = d3.select(this).attr('data-res');
+        d3.selectAll('.buttons button').classed('active', false);
+        d3.select(this).classed('active', true);
+        updateChart(res);
+      });
+    }).catch(error => {
+      console.error('Errore:', error);
+    });
+
+    // Aggregate and compute base-100 index per station
+    function aggregateByStation(resolution) {
+      const grouped = d3.group(filteredData, d => d.station);
+      return Array.from(grouped, ([station, records]) => {
+        let rolled;
+        if (resolution === 'monthly') {
+          rolled = d3.rollups(
+            records,
+            v => d3.mean(v, d => d.value),
+            d => formatMonth(d.date)
+          ).map(([k, mean]) => ({ date: parseMonth(k), value: mean }));
+        } else if (resolution === 'quarterly') {
+          rolled = d3.rollups(
+            records,
+            v => d3.mean(v, d => d.value),
+            d => {
+              const y = d.date.getFullYear();
+              const q = Math.floor(d.date.getMonth() / 3) + 1;
+              return `${y}-Q${q}`;
+            }
+          ).map(([k, mean]) => {
+            const [y, q] = k.split('-Q');
+            return { date: new Date(+y, (q - 1) * 3, 1), value: mean };
+          });
+        } else {
+          // yearly
+          rolled = d3.rollups(
+            records,
+            v => d3.mean(v, d => d.value),
+            d => d.date.getFullYear()
+          ).map(([k, mean]) => ({ date: new Date(+k, 0, 1), value: mean }));
+        }
+        // sort and index
+        rolled.sort((a, b) => d3.ascending(a.date, b.date));
+        const base = rolled.length ? rolled[0].value : 1;
+        const indexed = rolled.map(d => ({ date: d.date, value: (d.value / base) * 100 }));
+        return { station, values: indexed };
+      });
+    }
+
+    // Update chart
+    function updateChart(resolution) {
+      const dataSeries = aggregateByStation(resolution);
+      // Compute extents
+      const allDates = dataSeries.flatMap(s => s.values.map(d => d.date));
+      const allValues = dataSeries.flatMap(s => s.values.map(d => d.value));
+      xScale.domain(d3.extent(allDates));
+      yScale.domain([d3.min(allValues), d3.max(allValues)]).nice();
+
+      // Axes
+      xAxisGroup.transition().duration(500).call(d3.axisBottom(xScale));
+      yAxisGroup.transition().duration(500).call(d3.axisLeft(yScale));
+
+      // Line generator
+      const lineGen = d3.line()
+        .x(d => xScale(d.date))
+        .y(d => yScale(d.value));
+
+      // Data join for lines
+      const lines = g.selectAll('.line').data(dataSeries, d => d.station);
+      lines.exit().remove();
+      lines.enter()
+        .append('path')
+        .attr('class', 'line')
+        .attr('stroke', d => color(d.station))
+        .merge(lines)
+        .transition().duration(500)
+        .attr('d', d => lineGen(d.values));
+
+      // Legend
+      const legend = svg.selectAll('.legend').data(dataSeries, d => d.station);
+      legend.exit().remove();
+      const legendEnter = legend.enter()
+        .append('g')
+        .attr('class', 'legend')
+        .attr('transform', (d, i) => `translate(${width + margin.left + 20},${margin.top + i*20})`);
+      legendEnter.append('rect')
+        .attr('width', 12)
+        .attr('height', 12)
+        .attr('fill', d => color(d.station));
+      legendEnter.append('text')
+        .attr('x', 16)
+        .attr('y', 10)
+        .text(d => d.station);
+      legendEnter.merge(legend);
+    }
+  </script>
+</body>
+</html>

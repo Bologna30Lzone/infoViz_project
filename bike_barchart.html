@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confronto Media Bike 2025 (&lt;30 vs &gt;30 km/h)</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { font-family: sans-serif; }
+    .bar { fill: steelblue; }
+    .bar:hover { fill: darkorange; }
+    .axis path, .axis line { fill: none; stroke: #000; shape-rendering: crispEdges; }
+    .axis text { font-size: 12px; }
+    .label { font-size: 14px; text-anchor: middle; }
+    .tooltip {
+      position: absolute;
+      background: rgba(255,255,255,0.9);
+      padding: 5px 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  </style>
+</head>
+<body>
+  <svg id="chart" width="600" height="400"></svg>
+  <div class="tooltip"></div>
+  <script>
+    const svg = d3.select('#chart'),
+          margin = { top: 40, right: 20, bottom: 60, left: 60 },
+          width = +svg.attr('width') - margin.left - margin.right,
+          height = +svg.attr('height') - margin.top - margin.bottom;
+
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    const tooltip = d3.select('.tooltip');
+
+    d3.csv('bike-trimmed.csv').then(raw => {
+      // Parse and filter data for 2025
+      const data = raw.map(d => ({
+        date: d3.timeParse('%Y-%m-%d')(d.data),
+        station: d.colonnina,
+        value: +d.totale,
+        limit: +d.VEL2024  // use VEL2024 column for speed limit
+      })).filter(d => d.date && d.date.getFullYear() === 2025);
+
+      // Group by speed limit category
+      const group = d3.rollups(
+        data,
+        v => d3.mean(v, d => d.value),
+        d => d.limit <= 30 ? '<30 km/h' : '>30 km/h'
+      ).map(([key, mean]) => ({ category: key, mean }));
+
+      // X scale
+      const x = d3.scaleBand()
+        .domain(group.map(d => d.category))
+        .range([0, width])
+        .padding(0.4);
+
+      // Y scale
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(group, d => d.mean)]).nice()
+        .range([height, 0]);
+
+      // X axis
+      g.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .selectAll('text')
+          .attr('dy', '1em');
+
+      // Y axis
+      g.append('g')
+        .call(d3.axisLeft(y));
+
+      // Bars
+      g.selectAll('.bar')
+        .data(group)
+        .enter().append('rect')
+          .attr('class', 'bar')
+          .attr('x', d => x(d.category))
+          .attr('width', x.bandwidth())
+          .attr('y', height)
+          .attr('height', 0)
+          .on('mouseover', (event, d) => {
+            tooltip.style('opacity', 1)
+                   .html(`<strong>${d.category}</strong><br>Media 2025: ${d.mean.toFixed(2)}`);
+          })
+          .on('mousemove', event => {
+            tooltip.style('left', (event.pageX + 10) + 'px')
+                   .style('top', (event.pageY - 28) + 'px');
+          })
+          .on('mouseout', () => {
+            tooltip.style('opacity', 0);
+          })
+        .transition()
+          .duration(800)
+          .attr('y', d => y(d.mean))
+          .attr('height', d => height - y(d.mean));
+
+      // Chart title
+      svg.append('text')
+        .attr('class', 'label')
+        .attr('x', margin.left + width / 2)
+        .attr('y', margin.top / 2)
+        .text('Confronto Media Bike 2025 (<30 vs >30 km/h)');
+    }).catch(err => console.error('Errore caricamento CSV:', err));
+  </script>
+</body>
+</html>

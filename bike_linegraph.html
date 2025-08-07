@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andamento Medio Bike Bologna (2019+)</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { font-family: sans-serif; }
+    .axis path, .axis line { fill: none; stroke: #000; shape-rendering: crispEdges; }
+    .line { fill: none; stroke: steelblue; stroke-width: 2px; }
+    .trend { fill: none; stroke: tomato; stroke-width: 2px; stroke-dasharray: 5,5; }
+    .point { fill: steelblue; stroke: #fff; stroke-width: 1px; }
+    .no-data { fill: red; font-size: 16px; }
+    .buttons { margin: 10px; }
+    .buttons button { margin-right: 5px; padding: 5px 10px; cursor: pointer; }
+    .active { background-color: #ddd; }
+    .tooltip {
+      position: absolute;
+      background: rgba(255,255,255,0.9);
+      padding: 5px 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  </style>
+</head>
+<body>
+  <svg id="chart" width="960" height="500"></svg>
+  <div class="buttons">
+    <button data-res="monthly" class="active">Monthly</button>
+    <button data-res="quarterly">Quarterly</button>
+    <button data-res="yearly">Yearly</button>
+  </div>
+  <div class="tooltip"></div>
+  <script>
+    const svg = d3.select('#chart'),
+          margin = { top: 20, right: 30, bottom: 50, left: 60 },
+          width = +svg.attr('width') - margin.left - margin.right,
+          height = +svg.attr('height') - margin.top - margin.bottom;
+
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    const tooltip = d3.select('body').select('.tooltip');
+
+    // Formats
+    const parseDate = d3.timeParse('%Y-%m-%d');
+    const formatMonthKey = d3.timeFormat('%Y-%m');
+    const parseMonthKey = d3.timeParse('%Y-%m');
+    const fmtMonthYear = d3.timeFormat('%b %Y');
+    const fmtMonth = d3.timeFormat('%b');
+
+    const selectedStations = new Set(['Ercolani', 'Sabotino', 'San Donato']);
+    const startDate = parseDate('2019-01-01');
+
+    // State
+    let filteredData, globalXDomain, globalYDomain;
+    let monthlyData, trendEnds;
+    let xScale, yScale, xAxisGroup, yAxisGroup;
+    let linePath, trendPath, pointGroup;
+    let currentRes = 'monthly';
+    let initialized = false;
+
+    d3.csv('bike-trimmed.csv').then(rawData => {
+      const dataAll = rawData.map(d => ({ date: parseDate(d.data), station: d.colonnina, value: +d.totale }));
+      filteredData = dataAll.filter(d => d.date && d.date >= startDate && d.value > 0 && selectedStations.has(d.station));
+
+      if (!filteredData.length) {
+        svg.append('text')
+          .attr('x', margin.left)
+          .attr('y', margin.top)
+          .attr('class', 'no-data')
+          .text('Nessun dato disponibile per le stazioni selezionate.');
+        return;
+      }
+
+      // Global domains
+      const dates = filteredData.map(d => d.date);
+      globalXDomain = [startDate, d3.max(dates)];
+
+      const monthlyMeans = d3.rollups(filteredData, v => d3.mean(v, d => d.value), d => formatMonthKey(d.date)).map(([,m])=>m);
+      const quarterlyMeans = d3.rollups(filteredData, v => d3.mean(v, d => d.value), d => {
+        const y=d.date.getFullYear(), q=Math.floor(d.date.getMonth()/3)+1;
+        return `${y}-Q${q}`;
+      }).map(([,m])=>m);
+      const yearlyMeans = d3.rollups(filteredData, v => d3.mean(v, d => d.value), d => d.date.getFullYear()).map(([,m])=>m);
+      globalYDomain = [0, d3.max([...monthlyMeans, ...quarterlyMeans, ...yearlyMeans])];
+
+      // Monthly data and fixed trend
+      monthlyData = d3.rollups(filteredData, v => d3.mean(v, d => d.value), d => formatMonthKey(d.date))
+                      .map(([k,m])=>({ date: parseMonthKey(k), mean: m }))
+                      .sort((a,b)=>d3.ascending(a.date,b.date));
+      // Compute trend on monthlyData
+      const xv=monthlyData.map(d=>d.date.getTime()), yv=monthlyData.map(d=>d.mean);
+      const xm=d3.mean(xv), ym=d3.mean(yv);
+      let num=0, den=0;
+      monthlyData.forEach(d=>{ const x=d.date.getTime(); num+=(x-xm)*(d.mean-ym); den+=(x-xm)*(x-xm); });
+      const slope=den?num/den:0, intercept=ym-slope*xm;
+      trendEnds=[
+        { date: monthlyData[0].date, mean: intercept + slope*monthlyData[0].date.getTime() },
+        { date: monthlyData[monthlyData.length-1].date, mean: intercept + slope*monthlyData[monthlyData.length-1].date.getTime() }
+      ];
+
+      // Scales & axes
+      xScale=d3.scaleTime().domain(globalXDomain).range([0,width]);
+      yScale=d3.scaleLinear().domain(globalYDomain).nice().range([height,0]);
+      xAxisGroup=g.append('g').attr('transform',`translate(0,${height})`);
+      yAxisGroup=g.append('g');
+
+      const lineGen=d3.line().curve(d3.curveLinear)
+                        .x(d=>xScale(d.date)).y(d=>yScale(d.mean));
+
+      linePath=g.append('path').attr('class','line');
+      trendPath=g.append('path').attr('class','trend').datum(trendEnds).attr('d',lineGen);
+      pointGroup=g.append('g');
+
+      d3.selectAll('.buttons button').on('click',function(){
+        currentRes=d3.select(this).attr('data-res');
+        d3.selectAll('.buttons button').classed('active',false);
+        d3.select(this).classed('active',true);
+        updateChart(currentRes);
+      });
+
+      updateChart(currentRes);
+
+      function aggregateMean(res){
+        if(res==='monthly') return monthlyData;
+        if(res==='quarterly'){
+          return d3.rollups(filteredData,v=>d3.mean(v,d=>d.value),d=>{
+            const y=d.date.getFullYear(),q=Math.floor(d.date.getMonth()/3)+1;return `${y}-Q${q}`;
+          }).map(([k,m])=>{const [y,q]=k.split('-Q');return{date:new Date(+y,(q-1)*3,1),mean:m}})
+          .sort((a,b)=>d3.ascending(a.date,b.date));
+        }
+        return d3.rollups(filteredData,v=>d3.mean(v,d=>d.value),d=>d.date.getFullYear())
+             .map(([k,m])=>({date:new Date(+k,0,1),mean:m}))
+             .sort((a,b)=>d3.ascending(a.date,b.date));
+      }
+
+      function updateChart(res){
+        const data=aggregateMean(res);
+        // X-axis ticks
+        let interval;
+        if(res==='monthly') interval=d3.timeMonth.every(1);
+        else if(res==='quarterly') interval=d3.timeMonth.every(3);
+        else interval=d3.timeYear.every(1);
+        const ticks=interval.range(globalXDomain[0],globalXDomain[1]);
+        xAxisGroup.transition().duration(800).call(
+          d3.axisBottom(xScale).tickValues(ticks).tickFormat(d=>d.getMonth()===0?d.getFullYear():'')
+        );
+        yAxisGroup.transition().duration(800).call(d3.axisLeft(yScale));
+
+        // Line animation
+        linePath.datum(data)
+          .attr('d',lineGen)
+          .attr('stroke-dasharray',function(){return this.getTotalLength();})
+          .attr('stroke-dashoffset',function(){return this.getTotalLength();})
+          .transition().duration(1000).attr('stroke-dashoffset',0);
+
+        // Points
+        const pts=pointGroup.selectAll('circle').data(data,d=>+d.date);
+        pts.exit().transition().duration(200).attr('r',0).remove();
+        pts.transition().duration(200).attr('cx',d=>xScale(d.date)).attr('cy',d=>yScale(d.mean));
+        pts.enter().append('circle').attr('class','point')
+          .attr('cx',d=>xScale(d.date)).attr('cy',d=>yScale(d.mean)).attr('r',0)
+          .transition().delay(50).duration(200).attr('r',4);
+
+        // Tooltip content based on resolution
+        pointGroup.selectAll('circle')
+          .on('mouseover',(event,d)=>{
+            d3.select(event.currentTarget).transition().duration(100).attr('r',6);
+            let label;
+            if(currentRes==='monthly'){
+              label=fmtMonthYear(d.date);
+            } else if(currentRes==='quarterly'){
+              const start=d.date;
+              const end=new Date(d.date.getFullYear(),d.date.getMonth()+2,1);
+              label=`${fmtMonth(start)}-${fmtMonth(end)} ${d.date.getFullYear()}`;
+            } else {
+              label=`${d.date.getFullYear()}`;
+            }
+            tooltip.style('opacity',1).html(`${label}<br><strong>Valore:</strong> ${d.mean.toFixed(2)}`);
+          })
+          .on('mousemove',event=>{
+            tooltip.style('left',event.pageX+10+'px').style('top',event.pageY-28+'px');
+          })
+          .on('mouseout',event=>{
+            d3.select(event.currentTarget).transition().duration(100).attr('r',4);
+            tooltip.style('opacity',0);
+          });
+      }
+    });
+  </script>
+</body>
+</html>
