@@ -192,7 +192,7 @@
     const normalized = normalizeName(street);
     console.log("Ricevuto nome via normalizzato:", normalized);
 
-    fetch('./flusso_per_html_veicoli_per_trimestri.csv')
+    fetch('./data/flusso_per_html_veicoli_per_trimestri.csv')
       .then(res => res.text())
       .then(text => {
         const [headerLine, ...lines] = text.trim().split('\n');
