@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carousel D3 Panels — Modular</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Left navbar -->
+  <nav class="navbar" aria-label="Quick navigation">
+    <div class="nav-list" id="quickNav"></div>
+  </nav>
+
+  <div class="viewport" id="viewport" aria-roledescription="carousel" aria-label="Slides">
+    <div class="top-right">
+      <button type="button" class="nav-btn" id="btnPrev" aria-label="Previous slide">◀</button>
+      <button type="button" class="nav-btn" id="btnNext" aria-label="Next slide">▶</button>
+    </div>
+
+    <div class="track" id="track">
+      <!-- HOME -->
+      <section class="panel home" data-label="HOME" data-module="none">
+        <div>
+          <h1>Home</h1>
+          <p>This is not the greatest paragraph in the world: This is just a Tribute</p>
+        </div>
+      </section>
+
+      <!-- Q1 -->
+      <section class="panel" data-label="Q. 1" data-module="bar">
+        <div class="panel-inner">
+          <div class="kicker">BEFORE AND AFTER 30-ZONE</div>
+          <div class="headline"><span class="accent">Before</span> and After 30-Zone</div>
+          <div class="lede">How have different zones been affected by the new law?</div>
+
+          <figure class="figure">
+            <div class="charts-grid">
+              <div class="chart" data-type="line"></div>
+              <div class="chart" data-type="bar"></div>
+            </div>
+            <figcaption class="caption">› 2022 ‹</figcaption>
+          </figure>
+
+          <aside class="sidebar">
+            <h3>Tracking traffic</h3>
+            <p>Bologna 30 blah blah blah yeaaaaahh</p>
+            <div class="mini-charts">
+              <div class="chart" data-type="spark"></div>
+              <div class="chart" data-type="area"></div>
+            </div>
+          </aside>
+
+          <div class="footer">
+            <div class="now-viewing">NOW VIEWING : Via Minzoni — AV CARS/DAY 2356 — Δ −7%</div>
+            <div class="spark"><div class="chart" data-type="spark"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Q2 (uses your bike line chart) -->
+      <section class="panel" data-label="Q. 2" data-module="line">
+        <div class="panel-inner">
+          <div class="kicker">SOME BIKE SHIT</div>
+          <div class="headline"><span class="accent">Question</span> Two</div>
+          <div class="lede">Bike flow trend with semiannual aggregation.</div>
+
+          <figure class="figure">
+            <div class="bike-chart chart" data-type="bike-line"></div>
+          </figure>
+
+          <aside class="sidebar">
+            <h3>Title</h3>
+            <p>This chart is really really cool</p>
+            <div class="mini-charts">
+              <div class="chart" data-type="bar"></div>
+              <div class="chart" data-type="spark"></div>
+            </div>
+          </aside>
+
+          <div class="footer">
+            <div class="now-viewing">NOW VIEWING : Sample Street — CHANGE YOY +3%</div>
+            <div class="spark"><div class="chart" data-type="spark"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Q3 -->
+      <section class="panel" data-label="Q. 3" data-module="bar">
+        <div class="panel-inner">
+          <div class="kicker">BEFORE AND AFTER 30-ZONE</div>
+          <div class="headline"><span class="accent">Question</span> Three</div>
+          <div class="lede">Another placeholder slide with the same styling.</div>
+
+          <figure class="figure">
+            <div class="charts-grid">
+              <div class="chart" data-type="bar"></div>
+              <div class="chart" data-type="area"></div>
+            </div>
+            <figcaption class="caption">› 2024 ‹</figcaption>
+          </figure>
+
+          <aside class="sidebar">
+            <h3>Notes</h3>
+            <p>Etiam porta sem malesuada magna mollis euismod.</p>
+            <div class="mini-charts">
+              <div class="chart" data-type="spark"></div>
+              <div class="chart" data-type="line"></div>
+            </div>
+          </aside>
+
+          <div class="footer">
+            <div class="now-viewing">NOW VIEWING : Boulevard — Δ after policy −2%</div>
+            <div class="spark"><div class="chart" data-type="spark"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- END -->
+      <section class="panel end" data-label="END" data-module="none">
+        <div>
+          <h1>End</h1>
+          <p>kill me pls</p>
+        </div>
+      </section>
+    </div>
+
+    <div id="announce" class="sr-only" aria-live="polite"></div>
+  </div>
+
+  <!-- App (module) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
