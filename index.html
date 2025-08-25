@@ -6,6 +6,7 @@
   <title>Dynamic Webpage with Interactive Maps & Charts</title>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body, html { height: 100%; font-family: Arial, sans-serif; }
@@ -116,16 +117,22 @@
 
       <section id="map-section" class="section">
         <div class="map-selector">
-          <button data-map="map1">2022</button>
-          <button data-map="map2">2023</button>
-          <button data-map="map3">2024</button>
-          <button data-map="map4">2025</button>
+          <button data-map="map1">2019</button>
+          <button data-map="map2">2020</button>
+          <button data-map="map3">2021</button>
+          <button data-map="map4">2022</button>
+          <button data-map="map5">2023</button>
+          <button data-map="map6">2024</button>
+          <button data-map="map7">2025</button>
         </div>
         <div class="map-container">
-          <iframe class="map-frame" id="map1" src="./maps/heatmapVie2022.html"></iframe>
-          <iframe class="map-frame" id="map2" src="./maps/heatmapVie2023.html"></iframe>
-          <iframe class="map-frame" id="map3" src="./maps/heatmapVie2024.html"></iframe>
-          <iframe class="map-frame" id="map4" src="./maps/heatmapVie2025.html"></iframe>
+          <iframe class="map-frame" id="map1" src="./maps/heatmapVie2019.html"></iframe>
+          <iframe class="map-frame" id="map2" src="./maps/heatmapVie2020.html"></iframe>
+          <iframe class="map-frame" id="map3" src="./maps/heatmapVie2021.html"></iframe>
+          <iframe class="map-frame" id="map4" src="./maps/heatmapVie2022.html"></iframe>
+          <iframe class="map-frame" id="map5" src="./maps/heatmapVie2023.html"></iframe>
+          <iframe class="map-frame" id="map6" src="./maps/heatmapVie2024.html"></iframe>
+          <iframe class="map-frame" id="map7" src="./maps/heatmapVie2025.html"></iframe>
         </div>
 
         <div class="info-container">
@@ -142,6 +149,7 @@
       <section id="other-section" class="section">
         <h1>Sezione Altro</h1>
         <p>Contenuti aggiuntivi qui.</p>
+        <canvas id="chart" width="600" height="400"></canvas>
       </section>
     </div>
   </div>
@@ -169,8 +177,8 @@
   });
 
   // Chart.js setup
-  const ctx = document.getElementById('streetChart').getContext('2d');
-  let streetChart = new Chart(ctx, {
+  const ctx1 = document.getElementById('streetChart').getContext('2d');
+  let streetChart = new Chart(ctx1, {
     type: 'line',
     data: { labels: [], datasets: [{ label: 'Totale Giornaliero', data: [] }] },
     options: { responsive: true, maintainAspectRatio: false }
@@ -231,6 +239,55 @@
       })
       .catch(err => console.error('Errore nel fetch del CSV:', err));
   }, false);
+
+
+
+  // PER SEZIONE 2 (30 VS NON 30)
+  async function loadCSV(url) {
+      const response = await fetch(url);
+      const text = await response.text();
+      const lines = text.trim().split("\n");
+      
+      // Rimuove l'header e prende la prima riga di dati
+      lines.shift();
+      const [cars30, bikes30, carsAbove30, bikesAbove30] = lines[0].split(",").map(Number);
+
+      return [cars30, bikes30, carsAbove30, bikesAbove30];
+    }
+
+    async function drawChart() {
+      const data = await loadCSV("./data/df_30vsnon30.csv");
+
+      new Chart(document.getElementById('chart'), {
+        type: 'bar',
+        data: {
+          labels: [
+            'Cars (≤ 30 km/h)',
+            'Bikes (≤ 30 km/h)',
+            'Cars (> 30 km/h)',
+            'Bikes (> 30 km/h)'
+          ],
+          datasets: [{
+            label: 'Traffico medio',
+            data: data,
+            backgroundColor: [
+              'rgba(54, 162, 235, 0.7)', // auto ≤ 30
+              'rgba(255, 99, 132, 0.7)', // bici ≤ 30
+              'rgba(54, 162, 235, 0.7)', // auto > 30
+              'rgba(255, 99, 132, 0.7)'  // bici > 30
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    drawChart();
 </script>
 </body>
 </html>
