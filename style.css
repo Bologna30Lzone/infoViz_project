@@ -1,34 +1,35 @@
 :root {
   --bg: #ffffff;
   --ink: #0f172a;
-  --muted: #6b7280;
-  --accent: #e11d48;
-  --accent-ink: #b91c1c;
-  --nav-bg: #f8fafc;
-  --nav-ink: #1f2937;
-  --nav-rule: #e5e7eb;
-  --chip: #0b1020;
-  --btn: #0b1b3a;
+  /* pure colors */
+  --blue: #000831;
+  --red: #C81515;
+  --yellow: #F3B61F;
+  --green: #00916E;
+  --grey: #6b7280;
+  --light-grey: #f3f4f6;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
+  font-size: 10px;
 }
 
 body {
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   background: var(--bg);
-  color: var(--ink);
+  color: var(--blue);
+  font-size: 1.2rem;
 }
 
 /* Left vertical navbar */
 .navbar {
   position: fixed;
   inset: 0 auto 0 0;
-  width: 180px;
-  background: var(--nav-bg);
-  border-right: 1px solid var(--nav-rule);
+  width: 10vw;
+  border-right: 1px solid var(--blue);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -50,7 +51,7 @@ body {
   cursor: pointer;
   padding: 10px 12px;
   border-radius: 10px;
-  color: var(--nav-ink);
+  color: var(--blue);
   font-size: 18px;
   font-weight: 700;
   display: flex;
@@ -60,13 +61,13 @@ body {
 }
 
 .nav-item[aria-current="true"] {
-  background: #fee2e2;
-  color: var(--accent);
+  color: var(--red);
   font-weight: 800;
+  text-decoration: underline;
 }
 
 .nav-item:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--red);
   outline-offset: 2px;
 }
 
@@ -104,7 +105,7 @@ body {
 }
 
 .nav-btn {
-  background: var(--btn);
+  background: var(--blue);
   border: 0;
   color: white;
   width: 40px;
@@ -135,7 +136,8 @@ body {
 
   display: grid;
   grid-template-rows: auto 1fr auto;
-  grid-template-columns: 1fr;  /* ← only one column now */
+  grid-template-columns: 1fr;
+  /* ← only one column now */
   gap: 20px;
 }
 
@@ -148,7 +150,7 @@ body {
   grid-column: 1 / -1;
   font-size: 12px;
   letter-spacing: .14em;
-  color: var(--muted);
+  color: var(--grey);
 }
 
 .headline {
@@ -160,13 +162,13 @@ body {
 }
 
 .headline .accent {
-  color: var(--accent);
+  color: var(--red);
 }
 
 .lede {
   grid-column: 1 / 2;
   margin-top: -6px;
-  color: var(--muted);
+  color: var(--grey);
   font-size: 13px;
 }
 
@@ -174,15 +176,13 @@ body {
 .figure {
   grid-column: 1 / 2;
   grid-row: auto;
-  /* border: 1px solid #e5e7eb;
-  border-radius: 8px; */
   background: white;
-  padding: 10px;
 
   /* layout: two children side-by-side */
   display: grid;
-  grid-template-columns: auto auto; /* content-based widths; use 1fr 1fr for equal split */
-  gap: 30px;
+  grid-template-columns: auto auto;
+  /* content-based widths; use 1fr 1fr for equal split */
+  gap: 3rem;
   align-items: stretch;
 }
 
@@ -206,7 +206,7 @@ body {
 
 .figure .caption {
   font-size: 12px;
-  color: var(--accent);
+  color: var(--red);
 }
 
 /* .sidebar {
@@ -271,7 +271,8 @@ body {
 }
 
 /* Home / End */
-.panel.home, .panel.end {
+.panel.home,
+.panel.end {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -280,15 +281,17 @@ body {
   grid-template-rows: 1fr;
 }
 
-.panel.home h1, .panel.end h1 {
+.panel.home h1,
+.panel.end h1 {
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
   margin-bottom: 8px;
 }
 
-.panel.home p, .panel.end p {
-  color: var(--muted);
+.panel.home p,
+.panel.end p {
+  color: var(--grey);
 }
 
 .sr-only {
@@ -407,34 +410,42 @@ body {
 /* default .figure (keep your existing rules) */
 .figure {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* equal split by default */
+  grid-template-columns: 1fr 1fr;
+  /* equal split by default */
   gap: 30px;
 }
 
 /* modifier when you want the chart bigger */
 .figure.wide-chart {
-  grid-template-columns: 1fr 1fr; /* chart gets twice as much as the other */
+  grid-template-columns: 1fr 1fr;
+  /* chart gets twice as much as the other */
 }
 
 /* ensure the chart and the text each stay in their own track */
-.figure.wide-chart > .chart {
-  grid-column: 1; /* chart on left */
+.figure.wide-chart>.chart {
+  grid-column: 1;
+  /* chart on left */
 }
-.figure.wide-chart > div:not(.chart) {
-  grid-column: 2; /* text on right */
+
+.figure.wide-chart>div:not(.chart) {
+  grid-column: 2;
+  /* text on right */
 }
 
 /* if sometimes the chart comes second, flip the ratio */
 .figure.wide-chart.chart-right {
   grid-template-columns: 1fr 1fr;
 }
-.figure.wide-chart.chart-right > div:not(.chart) {
+
+.figure.wide-chart.chart-right>div:not(.chart) {
   grid-column: 1;
 }
-.figure.wide-chart.chart-right > .chart {
+
+.figure.wide-chart.chart-right>.chart {
   grid-column: 2;
 }
 
+<<<<<<< Updated upstream
 /*HEATMAPS*/
 #map-section {
   display: grid;
@@ -473,4 +484,29 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+=======
+button.small-buttons {
+  padding: 4px 8px;
+  border: 1px solid var(--light-grey);
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+
+button.small-buttons.active {
+  background: var(--light-grey);
+  cursor: pointer;
+}
+
+.intro {
+  height: 10vh;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  gap: 5rem
+>>>>>>> Stashed changes
 }

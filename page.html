@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,6 +14,7 @@
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <!-- Left navbar -->
   <nav class="navbar" aria-label="Quick navigation">
@@ -68,9 +70,17 @@
             <p>Bologna 30 blah blah blah yeaaaaahh</p>
           </aside>
 
+<<<<<<< Updated upstream
           <div class="info-container">
           <div class="text-block" id="text-content">
             <p>Seleziona una via sulla mappa per visualizzare i dati.</p>
+=======
+          <div class="footer">
+            <div class="now-viewing">NOW VIEWING : Via Minzoni — AV CARS/DAY 2356 — Δ −7%</div>
+            <div class="spark">
+              <div class="chart" data-type="spark"></div>
+            </div>
+>>>>>>> Stashed changes
           </div>
           <div class="chart-block">
             <canvas id="streetChart"></canvas>
@@ -114,7 +124,9 @@
 
           <div class="footer">
             <div class="now-viewing">NOW VIEWING : Boulevard — Δ after policy −2%</div>
-            <div class="spark"><div class="chart" data-type="spark"></div></div>
+            <div class="spark">
+              <div class="chart" data-type="spark"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -122,28 +134,45 @@
       <!-- Q4 -->
       <section class="panel" data-label="Q. 4" data-module="bar">
         <div class="panel-inner">
-          <div class="kicker">QUESTION FOUR</div>
-          <div class="headline">
-            How has <span class="accent">Air Quality</span> changed in the 30-zone?
+          <div class="intro">
+            <div class="kicker">QUESTION FOUR</div>
+            <div class="headline">
+              How has <span class="accent">Air Quality</span> changed in the 30-zone?
+            </div>
           </div>
+          <div class="content">
 
-          <figure class="figure wide-chart">
+            <figure class="figure wide-chart">
               <div class="chart" data-type="air-quality" data-gas-url="data/gases.json" style="height:40vh"></div>
               <div>
                 <h3>Air Quality</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis a orci lectus. Suspendisse nec interdum sem. Donec sagittis ex tristique magna lobortis auctor. Proin vestibulum cursus tellus, et volutpat sapien maximus nec. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec rutrum blandit ante, vel tincidunt lacus maximus ac. Nam eu lacinia turpis. Curabitur id arcu et dui cursus consectetur. Integer viverra est id libero rhoncus, vel sagittis metus facilisis. Mauris aliquam pellentesque libero, quis posuere ligula sodales non.</p>
+                <p>We wanted to check if the new policy impacted air quality. In order to do that we used the data
+                  collected by 2 air quality stations in near the city center (Porta San Felice and Giardini
+                  Margherita).
+                  Different gases were measured, each with their own consequences and thresholds. The thresholds
+                  represent
+                  the guidelines imposed by the European Union (EU) and the World Health organization for air quality.
+                </p>
+                <p>There is no general trend observable across the different gases, each has a different behaviour
+                  through
+                  the years, find out more about each gas by clicking the buttons under the graph:</p>
+                <p id="gas-info">
+                  PM10</p>
               </div>
-          </figure>
+            </figure>
 
-          <figure class="figure wide-chart chart-right">
+            <figure class="figure wide-chart chart-right">
               <div>
                 <h3>Electric Vehicle Usage</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis a orci lectus. Suspendisse nec interdum sem. Donec sagittis ex tristique magna lobortis auctor. Proin vestibulum cursus tellus, et volutpat sapien maximus nec. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec rutrum blandit ante, vel tincidunt lacus maximus ac. Nam eu lacinia turpis. Curabitur id arcu et dui cursus consectetur. Integer viverra est id libero rhoncus, vel sagittis metus facilisis. Mauris aliquam pellentesque libero, quis posuere ligula sodales non.</p>
+                <p>We also wanted to explore if there was some correlation between the change of air quality and the
+                  growth of electric car vehicles. While it is true that the growth is of car vehicle show a positive
+                  trend (+1% from 2019), the percentage over the the total count of cars is too little to have any
+                  significant impact. </p>
               </div>
-              <div class="chart" data-type="ev-share"   data-ev-url="data/electric.csv" style="height:35vh"></div>
-          </figure>
+              <div class="chart" data-type="ev-share" data-ev-url="data/electric.csv" style="height:30vh"></div>
+            </figure>
 
-        </div>
+          </div>
       </section>
 
       <!-- END -->
@@ -163,4 +192,5 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script type="module" src="js/app.js"></script>
 </body>
+
 </html>
