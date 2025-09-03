@@ -40,28 +40,42 @@
           <div class="kicker">BEFORE AND AFTER 30-ZONE</div>
           <div class="headline"><span class="accent">Before</span> and After 30-Zone</div>
           <div class="lede">How have different zones been affected by the new law?</div>
-
-          <figure class="figure">
-            <div class="charts-grid">
-              <div class="chart" data-type="line"></div>
-              <div class="chart" data-type="bar"></div>
+          <div class="chart" data-type="heatmaps">
+            <div class="map-selector">
+              <button data-map="map1">2019</button>
+              <button data-map="map2">2020</button>
+              <button data-map="map3">2021</button>
+              <button data-map="map4">2022</button>
+              <button data-map="map5">2023</button>
+              <button data-map="map6">2024</button>
+              <button data-map="map7">2025</button>
+            </div>
+            <figure class="figure">
+            <div class="map-container">
+              <iframe class="map-frame" id="map1" src="./maps/heatmapVie2019.html"></iframe>
+              <iframe class="map-frame" id="map2" src="./maps/heatmapVie2020.html"></iframe>
+              <iframe class="map-frame" id="map3" src="./maps/heatmapVie2021.html"></iframe>
+              <iframe class="map-frame" id="map4" src="./maps/heatmapVie2022.html"></iframe>
+              <iframe class="map-frame" id="map5" src="./maps/heatmapVie2023.html"></iframe>
+              <iframe class="map-frame" id="map6" src="./maps/heatmapVie2024.html"></iframe>
+              <iframe class="map-frame" id="map7" src="./maps/heatmapVie2025.html"></iframe>
             </div>
             <figcaption class="caption">› 2022 ‹</figcaption>
-          </figure>
-
+            </figure>
+          </div>
           <aside class="sidebar">
             <h3>Tracking traffic</h3>
             <p>Bologna 30 blah blah blah yeaaaaahh</p>
-            <div class="mini-charts">
-              <div class="chart" data-type="spark"></div>
-              <div class="chart" data-type="area"></div>
-            </div>
           </aside>
 
-          <div class="footer">
-            <div class="now-viewing">NOW VIEWING : Via Minzoni — AV CARS/DAY 2356 — Δ −7%</div>
-            <div class="spark"><div class="chart" data-type="spark"></div></div>
+          <div class="info-container">
+          <div class="text-block" id="text-content">
+            <p>Seleziona una via sulla mappa per visualizzare i dati.</p>
           </div>
+          <div class="chart-block">
+            <canvas id="streetChart"></canvas>
+          </div>
+        </div>
         </div>
       </section>
 
@@ -145,6 +159,8 @@
   </div>
 
   <!-- App (module) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
