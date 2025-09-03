@@ -22,10 +22,12 @@ export function chartBikeLine(container, d3){
   const markerDate = parseDate('2024-01-01');
 
   function aggregateSemiannual(rows){
+    // Map + filter
     const filtered = rows
       .map(d => ({ date: parseDate(d.data), value: +d.totale, station: d.colonnina }))
       .filter(d => d.date && d.date >= startDate && d.value > 0 && selectedStations.has(d.station));
 
+    // Roll up by half-year (H1/H2)
     const rolled = d3.rollups(
       filtered,
       v => d3.mean(v, d => d.value),
@@ -40,27 +42,6 @@ export function chartBikeLine(container, d3){
     });
 
     return rolled.sort((a, b) => d3.ascending(a.date, b.date));
-  }
-
-  function computeTrend(data){
-    // simple OLS on semiannual points
-    const xs = data.map(d => d.date.getTime());
-    const ys = data.map(d => d.mean);
-    const xm = d3.mean(xs), ym = d3.mean(ys);
-    let num = 0, den = 0;
-    for (let i = 0; i < xs.length; i++){
-      num += (xs[i] - xm) * (ys[i] - ym);
-      den += (xs[i] - xm) ** 2;
-    }
-    const slope = den ? num / den : 0;
-    const intercept = ym - slope * xm;
-
-    const firstT = data[0].date.getTime();
-    const lastT  = data[data.length - 1].date.getTime();
-    return [
-      { date: new Date(firstT), mean: intercept + slope * firstT },
-      { date: new Date(lastT),  mean: intercept + slope * lastT  }
-    ];
   }
 
   function render(rows){
@@ -79,7 +60,7 @@ export function chartBikeLine(container, d3){
       .domain([0, d3.max(data, d => d.mean)]).nice()
       .range([h, 0]);
 
-    // Axes (6-month ticks, labeled H1/H2)
+    // Axes (ticks every 6 months, labeled as H1/H2)
     const tickEvery6m = d3.timeMonth.every(6);
     g.append('g')
       .attr('transform', `translate(0,${h})`)
@@ -92,10 +73,12 @@ export function chartBikeLine(container, d3){
       .attr('class','axis')
       .call(d3.axisLeft(y));
 
-    // Main line (animated reveal)
-    const line = d3.line().x(d => x(d.date)).y(d => y(d.mean));
+    // Line
+    const line = d3.line()
+      .x(d => x(d.date))
+      .y(d => y(d.mean));
 
-    const path = g.append('path')
+    g.append('path')
       .datum(data)
       .attr('class', 'line')
       .attr('fill','none')
@@ -103,59 +86,27 @@ export function chartBikeLine(container, d3){
       .attr('stroke-width',2)
       .attr('d', line);
 
-    const totalLen = path.node().getTotalLength();
-    path
-      .attr('stroke-dasharray', `${totalLen} ${totalLen}`)
-      .attr('stroke-dashoffset', totalLen)
-      .transition()
-      .duration(1200)
-      .ease(d3.easeCubicOut)
-      .attr('stroke-dashoffset', 0);
-
-    // Points (fade & grow)
+    // Points (optional)
     g.selectAll('circle.point')
       .data(data)
       .join('circle')
       .attr('class','point')
       .attr('cx', d => x(d.date))
       .attr('cy', d => y(d.mean))
-      .attr('r', 0)
-      .attr('opacity', 0)
-      .transition()
-      .delay(300)
-      .duration(500)
-      .attr('r', 4)
-      .attr('opacity', 1);
+      .attr('r', 4);
 
-    // Dotted red trend line (fade-in)
-    const trend = computeTrend(data);
-    g.append('path')
-      .datum(trend)
-      .attr('fill','none')
-      .attr('stroke','#e11d48')
-      .attr('stroke-width',2)
-      .attr('stroke-dasharray','6,4')
-      .attr('opacity', 0)
-      .attr('d', line)
-      .transition()
-      .delay(200)
-      .duration(600)
-      .attr('opacity', 1);
+    // Città 30 marker
+    const mx = x(markerDate);
+    g.append('line')
+      .attr('class','marker-line')
+      .attr('x1', mx).attr('x2', mx)
+      .attr('y1', 0).attr('y2', h);
 
-    // Città 30 marker (only if within x domain)
-    const [xmin, xmax] = x.domain();
-    if (markerDate >= xmin && markerDate <= xmax){
-      const mx = x(markerDate);
-      g.append('line')
-        .attr('class','marker-line')
-        .attr('x1', mx).attr('x2', mx)
-        .attr('y1', 0).attr('y2', h);
-      g.append('text')
-        .attr('class','marker-label')
-        .attr('x', mx + 5)
-        .attr('y', -5)
-        .text('Città 30');
-    }
+    g.append('text')
+      .attr('class','marker-label')
+      .attr('x', mx + 5)
+      .attr('y', -5)
+      .text('Città 30');
   }
 
   // Load data (cached)
@@ -163,7 +114,7 @@ export function chartBikeLine(container, d3){
   (async () => {
     try {
       if (!bikeDataCache) {
-        bikeDataCache = await d3.csv('bike-trimmed.csv'); // keep this next to index.html
+        bikeDataCache = await d3.csv('data/bike-trimmed.csv'); // ensure this is next to index.html
       }
       if (alive) render(bikeDataCache);
     } catch (err) {

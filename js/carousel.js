@@ -48,11 +48,22 @@ export function initCarousel({ onSlideChange } = {}) {
 
   // Pointer swipe (ignore if starting on controls/nav)
   let startX = 0, startTx = 0, dragging = false;
-  viewport.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.nav-btn') || e.target.closest('.navbar')) return;
-    dragging = true; startX = e.clientX; startTx = -index * size().width; track.style.transition = 'none';
-    viewport.setPointerCapture(e.pointerId);
-  });
+viewport.addEventListener('pointerdown', (e) => {
+  // Don’t start a swipe when clicking controls inside charts
+  const interactive = e.target.closest(
+    '.nav-btn, .navbar, ' +                  // existing exceptions
+    '.chart button, .chart [role="button"], '+
+    '.chart input, .chart select, .chart textarea, '+
+    '.chart .aq-ui, .chart .ev-buttons, .chart .chart-controls'
+  );
+  if (interactive) return;
+
+  dragging = true;
+  startX = e.clientX;
+  startTx = -index * size().width;
+  track.style.transition = 'none';
+  viewport.setPointerCapture(e.pointerId);
+});
   viewport.addEventListener('pointermove', (e) => { if (!dragging) return; const dx = e.clientX - startX; track.style.transform = `translateX(${startTx + dx}px)`; });
   function endDrag(e) {
     if (!dragging) return; dragging = false; track.style.transition = '';

@@ -1,0 +1,389 @@
+{
+  "PM10": [
+    {
+      "year": 2019,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 22.105413105413106
+    },
+    {
+      "year": 2019,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 25.442577030812323
+    },
+    {
+      "year": 2020,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 23.72222222222222
+    },
+    {
+      "year": 2020,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 25.82051282051282
+    },
+    {
+      "year": 2021,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 22.754985754985753
+    },
+    {
+      "year": 2021,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 25.874651810584957
+    },
+    {
+      "year": 2022,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 23.1887323943662
+    },
+    {
+      "year": 2022,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 27.175487465181057
+    },
+    {
+      "year": 2023,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 19.801136363636363
+    },
+    {
+      "year": 2023,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 22.34173669467787
+    },
+    {
+      "year": 2024,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 22.062857142857144
+    },
+    {
+      "year": 2024,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 25.477653631284916
+    },
+    {
+      "year": 2025,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 21.518617021276597
+    },
+    {
+      "year": 2025,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 25.465425531914892
+    }
+  ],
+  "O3 (OZONO)": {
+    "eu": [
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2019,
+        "exceedance_days": 60,
+        "above_eu_target": true,
+        "three_year_avg_days": null,
+        "standard": "EU (120 \u00b5g/m\u00b3)"
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2020,
+        "exceedance_days": 35,
+        "above_eu_target": true,
+        "three_year_avg_days": null,
+        "standard": "EU (120 \u00b5g/m\u00b3)"
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2021,
+        "exceedance_days": 34,
+        "above_eu_target": true,
+        "three_year_avg_days": 43.0,
+        "standard": "EU (120 \u00b5g/m\u00b3)"
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2022,
+        "exceedance_days": 56,
+        "above_eu_target": true,
+        "three_year_avg_days": 41.666666666666664,
+        "standard": "EU (120 \u00b5g/m\u00b3)"
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2023,
+        "exceedance_days": 49,
+        "above_eu_target": true,
+        "three_year_avg_days": 46.333333333333336,
+        "standard": "EU (120 \u00b5g/m\u00b3)"
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2024,
+        "exceedance_days": 40,
+        "above_eu_target": true,
+        "three_year_avg_days": 48.333333333333336,
+        "standard": "EU (120 \u00b5g/m\u00b3)"
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2025,
+        "exceedance_days": 15,
+        "above_eu_target": false,
+        "three_year_avg_days": 34.666666666666664,
+        "standard": "EU (120 \u00b5g/m\u00b3)"
+      }
+    ],
+    "who": [
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2019,
+        "exceedance_days": 92
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2020,
+        "exceedance_days": 74
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2021,
+        "exceedance_days": 90
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2022,
+        "exceedance_days": 100
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2023,
+        "exceedance_days": 98
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2024,
+        "exceedance_days": 77
+      },
+      {
+        "station": "GIARDINI MARGHERITA",
+        "year": 2025,
+        "exceedance_days": 41
+      }
+    ]
+  },
+  "CO (MONOSSIDO DI CARBONIO)": [
+    {
+      "station": "PORTA SAN FELICE",
+      "year": 2019,
+      "yearly_max_8h_mean": 2.3124999999999996
+    },
+    {
+      "station": "PORTA SAN FELICE",
+      "year": 2020,
+      "yearly_max_8h_mean": 1.6499999999999997
+    },
+    {
+      "station": "PORTA SAN FELICE",
+      "year": 2021,
+      "yearly_max_8h_mean": 1.8874999999999997
+    },
+    {
+      "station": "PORTA SAN FELICE",
+      "year": 2022,
+      "yearly_max_8h_mean": 1.6624999999999996
+    },
+    {
+      "station": "PORTA SAN FELICE",
+      "year": 2023,
+      "yearly_max_8h_mean": 1.6499999999999997
+    },
+    {
+      "station": "PORTA SAN FELICE",
+      "year": 2024,
+      "yearly_max_8h_mean": 1.5749999999999995
+    },
+    {
+      "station": "PORTA SAN FELICE",
+      "year": 2025,
+      "yearly_max_8h_mean": 1.2999999999999996
+    }
+  ],
+  "NO2 (BIOSSIDO DI AZOTO)": [
+    {
+      "year": 2019,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 20.48928308250042
+    },
+    {
+      "year": 2019,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 46.44956907601588
+    },
+    {
+      "year": 2020,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 17.003752058026517
+    },
+    {
+      "year": 2020,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 38.53260974799813
+    },
+    {
+      "year": 2021,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 16.510232660316273
+    },
+    {
+      "year": 2021,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 43.32074568822773
+    },
+    {
+      "year": 2022,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 18.39017404891043
+    },
+    {
+      "year": 2022,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 38.97924451268406
+    },
+    {
+      "year": 2023,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 15.649783704907929
+    },
+    {
+      "year": 2023,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 42.78126422944133
+    },
+    {
+      "year": 2024,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 14.761343390117444
+    },
+    {
+      "year": 2024,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 28.29936276830874
+    },
+    {
+      "year": 2025,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 14.609822379590033
+    },
+    {
+      "year": 2025,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 30.830282043910305
+    }
+  ],
+  "PM2.5": [
+    {
+      "year": 2019,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 13.72752808988764
+    },
+    {
+      "year": 2019,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 16.23380281690141
+    },
+    {
+      "year": 2020,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 15.420289855072463
+    },
+    {
+      "year": 2020,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 16.485632183908045
+    },
+    {
+      "year": 2021,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 13.983050847457626
+    },
+    {
+      "year": 2021,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 15.9125
+    },
+    {
+      "year": 2022,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 14.18767507002801
+    },
+    {
+      "year": 2022,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 17.23268698060942
+    },
+    {
+      "year": 2023,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 13.046242774566474
+    },
+    {
+      "year": 2023,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 13.554621848739496
+    },
+    {
+      "year": 2024,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 14.129213483146067
+    },
+    {
+      "year": 2024,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 14.360881542699724
+    },
+    {
+      "year": 2025,
+      "station": "GIARDINI MARGHERITA",
+      "yearly_mean": 14.101485148514852
+    },
+    {
+      "year": 2025,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 14.251497005988025
+    }
+  ],
+  "C6H6 (BENZENE)": [
+    {
+      "year": 2019,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 1.128622588165416
+    },
+    {
+      "year": 2020,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 0.9162762221060042
+    },
+    {
+      "year": 2021,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 0.9400836254756524
+    },
+    {
+      "year": 2022,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 0.9178488783945469
+    },
+    {
+      "year": 2023,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 0.9429043060514144
+    },
+    {
+      "year": 2024,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 0.9884990420213814
+    },
+    {
+      "year": 2025,
+      "station": "PORTA SAN FELICE",
+      "yearly_mean": 1.0205777510532945
+    }
+  ]
+}

@@ -69,26 +69,12 @@
       <section class="panel" data-label="Q. 2" data-module="line">
         <div class="panel-inner">
           <div class="kicker">SOME BIKE SHIT</div>
-          <div class="headline"><span class="accent">Question</span> Two</div>
-          <div class="lede">Bike flow trend with semiannual aggregation.</div>
+
 
           <figure class="figure">
             <div class="bike-chart chart" data-type="bike-line"></div>
           </figure>
 
-          <aside class="sidebar">
-            <h3>Title</h3>
-            <p>This chart is really really cool</p>
-            <div class="mini-charts">
-              <div class="chart" data-type="bar"></div>
-              <div class="chart" data-type="spark"></div>
-            </div>
-          </aside>
-
-          <div class="footer">
-            <div class="now-viewing">NOW VIEWING : Sample Street — CHANGE YOY +3%</div>
-            <div class="spark"><div class="chart" data-type="spark"></div></div>
-          </div>
         </div>
       </section>
 
@@ -110,16 +96,39 @@
           <aside class="sidebar">
             <h3>Notes</h3>
             <p>Etiam porta sem malesuada magna mollis euismod.</p>
-            <div class="mini-charts">
-              <div class="chart" data-type="spark"></div>
-              <div class="chart" data-type="line"></div>
-            </div>
           </aside>
 
           <div class="footer">
             <div class="now-viewing">NOW VIEWING : Boulevard — Δ after policy −2%</div>
             <div class="spark"><div class="chart" data-type="spark"></div></div>
           </div>
+        </div>
+      </section>
+
+      <!-- Q4 -->
+      <section class="panel" data-label="Q. 4" data-module="bar">
+        <div class="panel-inner">
+          <div class="kicker">QUESTION FOUR</div>
+          <div class="headline">
+            How has <span class="accent">Air Quality</span> changed in the 30-zone?
+          </div>
+
+          <figure class="figure wide-chart">
+              <div class="chart" data-type="air-quality" data-gas-url="data/gases.json" style="height:40vh"></div>
+              <div>
+                <h3>Air Quality</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis a orci lectus. Suspendisse nec interdum sem. Donec sagittis ex tristique magna lobortis auctor. Proin vestibulum cursus tellus, et volutpat sapien maximus nec. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec rutrum blandit ante, vel tincidunt lacus maximus ac. Nam eu lacinia turpis. Curabitur id arcu et dui cursus consectetur. Integer viverra est id libero rhoncus, vel sagittis metus facilisis. Mauris aliquam pellentesque libero, quis posuere ligula sodales non.</p>
+              </div>
+          </figure>
+
+          <figure class="figure wide-chart chart-right">
+              <div>
+                <h3>Electric Vehicle Usage</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis a orci lectus. Suspendisse nec interdum sem. Donec sagittis ex tristique magna lobortis auctor. Proin vestibulum cursus tellus, et volutpat sapien maximus nec. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec rutrum blandit ante, vel tincidunt lacus maximus ac. Nam eu lacinia turpis. Curabitur id arcu et dui cursus consectetur. Integer viverra est id libero rhoncus, vel sagittis metus facilisis. Mauris aliquam pellentesque libero, quis posuere ligula sodales non.</p>
+              </div>
+              <div class="chart" data-type="ev-share"   data-ev-url="data/electric.csv" style="height:35vh"></div>
+          </figure>
+
         </div>
       </section>
 

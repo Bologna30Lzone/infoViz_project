@@ -1,0 +1,242 @@
+// js/charts/airQuality.js (fixed: use selection from makeSVG directly)
+import { sizeOf, makeSVG } from './utils.js';
+
+const COLORS = {
+  'GIARDINI MARGHERITA': '#00916E',
+  'PORTA SAN FELICE': '#F3B61F',
+  eu: '#C81515',
+  who: '#000831',
+};
+
+const THRESHOLDS = {
+  'C6H6 (BENZENE)':             { EU: 5 },
+  'CO (MONOSSIDO DI CARBONIO)': { EU: 10 },
+  'NO2 (BIOSSIDO DI AZOTO)':    { WHO: 10, EU: 40 },
+  'O3 (OZONO)':                 { EU: 25 }, // exceedance days
+  'PM2.5':                      { WHO: 5,  EU: 20 },
+  'PM10':                       { WHO: 15, EU: 40 },
+};
+
+const DEFAULT_POLLUTANTS = [
+  'PM10',
+  'O3 (OZONO)',
+  'CO (MONOSSIDO DI CARBONIO)',
+  'NO2 (BIOSSIDO DI AZOTO)',
+  'PM2.5',
+  'C6H6 (BENZENE)'
+];
+
+export function chartAirQuality(container, d3){
+  if (!d3) return { dispose(){} };
+
+  const gasURL      = container.dataset.gasUrl || container.dataset.gasurl || 'gases.json';
+  const stationsOpt = (container.dataset.stations || 'GIARDINI MARGHERITA,PORTA SAN FELICE')
+                        .split(',').map(s => s.trim()).filter(Boolean);
+  let pollutantsOpt = (container.dataset.pollutants || '').split(',').map(s => s.trim()).filter(Boolean);
+  if (!pollutantsOpt.length) pollutantsOpt = DEFAULT_POLLUTANTS;
+
+  const root = d3.select(container);
+  root.selectAll('*').remove();
+  container.style.position = 'relative';
+
+  const { width, height } = sizeOf(container, 760, 380);
+  const margin = { top: 28, right: 24, bottom: 42, left: 52 };
+  const w = width - margin.left - margin.right;
+  const h = height - margin.top - margin.bottom;
+
+  const ui = root.append('div').attr('class','aq-ui').style('display','grid').style('gap','8px');
+  const btnRow = ui.append('div').style('display','flex').style('gap','8px').style('justify-content','center');
+
+  // FIX: makeSVG returns a selection, so append on it directly
+  const svg = makeSVG(d3, container, width, height);
+  const g   = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const gx = g.append('g').attr('transform', `translate(0,${h})`).attr('class','axis');
+  const gy = g.append('g').attr('class','axis');
+  const thresh = g.append('g').attr('class','thresholds');
+  const threshLbl = g.append('g').attr('class','threshold-labels');
+  const series = g.append('g').attr('class','series');
+  const legend = ui.append('div').style('display','grid').style('grid-auto-flow','column').style('gap','14px').style('justify-content','end');
+
+  let state = { pollutant: pollutantsOpt[0], gases: null };
+
+  function drawLegend(stations){
+    legend.selectAll('*').remove();
+    stations.forEach(s => {
+      const row = legend.append('div').style('display','grid').style('grid-auto-flow','column')
+        .style('align-items','center').style('gap','6px');
+      row.append('span').style('width','18px').style('height','3px').style('background', COLORS[s] || '#333');
+      row.append('span').style('font-size','12px').text(s);
+    });
+  }
+
+  function drawThresholds(yScale, pollutant){
+    thresh.selectAll('*').remove();
+    threshLbl.selectAll('*').remove();
+    const t = THRESHOLDS[pollutant] || {};
+    if (t.EU != null){
+      thresh.append('line').attr('x1',0).attr('x2',w).attr('y1', yScale(t.EU)).attr('y2', yScale(t.EU))
+        .attr('stroke', COLORS.eu).attr('stroke-width',2).attr('stroke-dasharray','4 4');
+      threshLbl.append('text').attr('x', w - 4).attr('y', yScale(t.EU) - 4)
+        .style('font-size','10px').attr('text-anchor','end').attr('fill', COLORS.eu).text('EU Threshold');
+    }
+    if (t.WHO != null && pollutant !== 'CO (MONOSSIDO DI CARBONIO)' && pollutant !== 'O3 (OZONO)'){
+      thresh.append('line').attr('x1',0).attr('x2',w).attr('y1', yScale(t.WHO)).attr('y2', yScale(t.WHO))
+        .attr('stroke', COLORS.who).attr('stroke-width',2).attr('stroke-dasharray','4 4');
+      threshLbl.append('text').attr('x', w - 4).attr('y', yScale(t.WHO) - 4)
+        .style('font-size','10px').attr('text-anchor','end').attr('fill', COLORS.who).text('WHO Threshold');
+    }
+  }
+
+  function renderO3(dataEu){
+    const yrs = Array.from(new Set(dataEu.map(d => d.year))).sort((a,b)=>a-b);
+    const x0 = d3.scaleBand().domain(yrs).range([0, w]).padding(0.2);
+    const x1 = d3.scaleBand().domain(stationsOpt).range([0, x0.bandwidth()]).padding(0.2);
+    const y  = d3.scaleLinear().domain([0, Math.max(30, d3.max(dataEu, d => +d.exceedance_days) || 0)]).nice().range([h, 0]);
+
+    gx.call(d3.axisBottom(x0).tickFormat(d3.format('d')));
+    gy.call(d3.axisLeft(y));
+
+    series.selectAll('*').remove();
+
+    const groups = series.selectAll('.yr').data(yrs).join('g')
+      .attr('class','yr').attr('transform', d => `translate(${x0(d)},0)`);
+
+    groups.selectAll('rect')
+      .data(yr => stationsOpt.map(st => {
+        const r = dataEu.find(d => d.year===yr && d.station===st);
+        return {year: yr, station: st, value: r ? +r.exceedance_days : 0};
+      }))
+      .join('rect')
+      .attr('x', d => x1(d.station))
+      .attr('y', y(0))
+      .attr('width', x1.bandwidth())
+      .attr('height', 0)
+      .attr('fill', d => COLORS[d.station] || '#555')
+      .transition().duration(700)
+      .attr('y', d => y(d.value))
+      .attr('height', d => y(0) - y(d.value));
+
+    drawThresholds(y, 'O3 (OZONO)');
+    drawLegend(stationsOpt);
+  }
+
+  function renderCO(rows){
+    const data = rows.map(d => ({ station: d.station, year: new Date(d.year,0,1), value: +d.yearly_max_8h_mean }));
+    const [ymin, ymax] = [0, Math.max(12, d3.max(data, d => d.value) || 0)];
+
+    const x = d3.scaleTime().domain([new Date(2019,0,1), new Date(2025,0,1)]).range([0, w]);
+    const y = d3.scaleLinear().domain([ymin, ymax]).nice().range([h, 0]);
+
+    gx.call(d3.axisBottom(x).tickFormat(d3.timeFormat('%Y')));
+    gy.call(d3.axisLeft(y));
+
+    series.selectAll('*').remove();
+
+    const byStation = d3.groups(data, d => d.station);
+    const line = d3.line().x(d => x(d.year)).y(d => y(d.value));
+
+    byStation.forEach(([station, vals]) => {
+      vals.sort((a,b)=>a.year-b.year);
+      const path = series.append('path')
+        .attr('fill','none')
+        .attr('stroke', COLORS[station] || '#333')
+        .attr('stroke-width',2)
+        .attr('d', line(vals));
+      const L = path.node().getTotalLength();
+      path.attr('stroke-dasharray', `${L} ${L}`).attr('stroke-dashoffset', L)
+          .transition().duration(900).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0);
+
+      series.selectAll(`.pt-${station.replace(/\s+/g,'-')}`)
+        .data(vals).join('circle')
+        .attr('r', 0).attr('cx', d => x(d.year)).attr('cy', d => y(d.value))
+        .attr('fill', COLORS[station] || '#333')
+        .transition().delay(200).duration(300).attr('r', 4);
+    });
+
+    drawThresholds(y, 'CO (MONOSSIDO DI CARBONIO)');
+    drawLegend(byStation.map(([k])=>k));
+  }
+
+  function renderStandard(rows, pollutant){
+    const data = rows.map(d => ({ station: d.station, year: new Date(d.year,0,1), value: +d.yearly_mean }))
+                     .filter(d => stationsOpt.includes(d.station));
+    const years = Array.from(new Set(data.map(d => d.year.getFullYear()))).sort((a,b)=>a-b);
+    const x = d3.scaleTime().domain([new Date(Math.min(...years),0,1), new Date(Math.max(...years),0,1)]).range([0, w]);
+
+    const vmax = d3.max(data, d => d.value) || 0;
+    const t = THRESHOLDS[pollutant] || {};
+    const ymax = Math.max(vmax, t.EU || 0, t.WHO || 0) + 1;
+    const y = d3.scaleLinear().domain([0, ymax]).nice().range([h, 0]);
+
+    gx.call(d3.axisBottom(x).tickValues(years.map(y=>new Date(y,0,1))).tickFormat(d3.timeFormat('%Y')));
+    gy.call(d3.axisLeft(y));
+
+    series.selectAll('*').remove();
+
+    const byStation = d3.groups(data, d => d.station);
+    const line = d3.line().x(d => x(d.year)).y(d => y(d.value));
+
+    byStation.forEach(([station, vals]) => {
+      vals.sort((a,b)=>a.year-b.year);
+      const path = series.append('path')
+        .attr('fill','none')
+        .attr('stroke', COLORS[station] || '#333')
+        .attr('stroke-width',2)
+        .attr('d', line(vals));
+      const L = path.node().getTotalLength();
+      path.attr('stroke-dasharray', `${L} ${L}`).attr('stroke-dashoffset', L)
+          .transition().duration(900).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0);
+
+      series.selectAll(`.pt-${station.replace(/\s+/g,'-')}`)
+        .data(vals).join('circle')
+        .attr('r', 0).attr('cx', d => x(d.year)).attr('cy', d => y(d.value))
+        .attr('fill', COLORS[station] || '#333')
+        .transition().delay(200).duration(300).attr('r', 4);
+    });
+
+    drawThresholds(y, pollutant);
+    drawLegend(byStation.map(([k])=>k));
+  }
+
+  function update(pollutant){
+    g.selectAll('.title').remove();
+    g.append('text').attr('class','title').attr('x', w/2).attr('y', -8).attr('text-anchor','middle')
+      .style('font-size','15px').style('font-weight','bold')
+      .text(pollutant === 'O3 (OZONO)' ? 'Annual Ozone Exceedance Days'
+            : pollutant === 'CO (MONOSSIDO DI CARBONIO)' ? 'Yearly Highest 8-Hour CO Concentration'
+            : `${pollutant} – Yearly Average`);
+
+    const data = state.gases?.[pollutant];
+    if (!data){ series.selectAll('*').remove(); return; }
+
+    if (pollutant === 'O3 (OZONO)') renderO3(data.eu || []);
+    else if (pollutant === 'CO (MONOSSIDO DI CARBONIO)') renderCO(data || []);
+    else renderStandard(data || [], pollutant);
+  }
+
+  btnRow.selectAll('button').data(pollutantsOpt).join('button')
+    .attr('type','button')
+    .text(d => d.split(' ')[0])
+    .style('padding','4px 8px').style('border','1px solid #e5e7eb').style('border-radius','6px').style('background','#fff')
+    .on('click', function(event, d){
+      btnRow.selectAll('button').style('background','#fff');
+      d3.select(event.currentTarget).style('background','#f3f4f6');
+      update(d);
+    });
+
+  let alive = true;
+  (async () => {
+    try{
+      const gases = await d3.json(gasURL);
+      if (!alive) return;
+      state.gases = gases;
+      update(state.pollutant);
+    }catch(e){
+      console.error(e);
+      root.append('div').text('Error loading gases data.');
+    }
+  })();
+
+  return { dispose(){ alive = false; root.selectAll('*').remove(); } };
+}
