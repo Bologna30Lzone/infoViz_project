@@ -198,65 +198,10 @@ body {
   gap: 10px;
 }
 
-.figure .charts-grid .chart {
-  border: 1px dashed #e5e7eb;
-  border-radius: 6px;
-  padding: 6px;
-}
 
 .figure .caption {
   font-size: 12px;
   color: var(--red);
-}
-
-/* .sidebar {
-  grid-column: 2 / 3;
-  grid-row: 2;
-  padding: 8px 14px;
-  display: grid;
-  gap: 10px;
-  grid-template-rows: auto auto 1fr;
-}
-
-.sidebar h3 {
-  margin: 0 0 4px;
-  color: var(--accent);
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: .02em;
-}
-
-.sidebar p {
-  margin: 0;
-  line-height: 1.5;
-  font-size: 14px;
-  color: var(--ink);
-}
-
-.sidebar .mini-charts {
-  display: grid;
-  gap: 8px;
-  grid-auto-rows: 120px;
-}
-
-.sidebar .mini-charts .chart {
-  border: 1px dashed #e5e7eb;
-  border-radius: 6px;
-  padding: 6px;
-} */
-
-.footer {
-  grid-column: 1 / -1;
-  grid-row: 3;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 18px;
-  align-items: start;
-}
-
-.now-viewing {
-  font-size: 12px;
-  letter-spacing: .12em;
 }
 
 .spark {
@@ -309,9 +254,6 @@ body {
 /* Bike chart extras */
 .bike-chart {
   position: relative;
-  border: 1px dashed #e5e7eb;
-  border-radius: 6px;
-  padding: 6px;
 }
 
 .bike-chart svg {
@@ -329,7 +271,7 @@ body {
 
 .bike-chart .line {
   fill: none;
-  stroke: steelblue;
+  stroke: var(--red);
   stroke-width: 2px;
 }
 
@@ -341,18 +283,18 @@ body {
 }
 
 .bike-chart .point {
-  fill: steelblue;
+  fill: var(--red);
   stroke: #fff;
   stroke-width: 1px;
 }
 
-.bike-chart .marker-line {
+.zona30-line {
   stroke: gray;
   stroke-width: 1px;
   stroke-dasharray: 4, 2;
 }
 
-.bike-chart .marker-label {
+.zona30-label {
   fill: gray;
   font-size: 12px;
   text-anchor: start;
@@ -507,8 +449,20 @@ button.small-buttons.active {
 }
 
 .content {
+  height: 90vh;
+}
+
+/* Air quality specific content styling */
+.content#air {
   display: flex;
   flex-direction: column;
-  height: 90vh;
-  gap: 5rem
+  gap: 5rem;
+}
+
+
+.content .figure .bike-chart {
+  height: 70vh;
+  /* Give it a reasonable height */
+  min-height: 300px;
+  /* Minimum height to prevent squeezing */
 }

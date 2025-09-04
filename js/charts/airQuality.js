@@ -185,10 +185,7 @@ export function chartAirQuality(container, d3) {
         .attr("x1", x2024)
         .attr("x2", x2024)
         .attr("y1", 0)
-        .attr("y2", h)
-        .attr("stroke", "#babdc3ff")
-        .attr("stroke-width", 2)
-        .attr("stroke-dasharray", "8 4");
+        .attr("y2", h);
 
       // Move line behind other elements
       line.lower();
@@ -199,13 +196,10 @@ export function chartAirQuality(container, d3) {
         .attr("class", "zona30-label")
         .attr("x", x2024 + 4)
         .attr("y", h - 10)
-        .style("font-size", "11px")
-        .style("font-weight", "bold")
-        .attr("fill", "#babdc3ff")
-        .text("Zona 30");
+        .text("Città 30");
 
       // Move label behind other elements too
-      label.lower();
+      label.raise();
     }
   }
 
