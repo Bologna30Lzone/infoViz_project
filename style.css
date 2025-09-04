@@ -398,7 +398,6 @@ body {
 .map-selector {
   margin-bottom: 1rem;
 }
-
 .map-selector button {
   margin-right: 0.5rem;
   padding: 0.5rem 1rem;
@@ -407,8 +406,8 @@ body {
 
 .map-container {
   position: relative;
+  height: 100%;
 }
-
 .map-frame {
   display: none;
   width: 100%;
@@ -418,7 +417,6 @@ body {
   top: 0;
   left: 0;
 }
-
 .map-frame.active {
   display: block;
 }
