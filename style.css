@@ -407,7 +407,6 @@ body {
 
 .map-container {
   position: relative;
-  height: 30vh;
 }
 
 .map-frame {
@@ -428,41 +427,4 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-
-button.small-buttons {
-  padding: 4px 8px;
-  border: 1px solid var(--light-grey);
-  border-radius: 6px;
-  background: #fff;
-  cursor: pointer;
-}
-
-
-button.small-buttons.active {
-  background: var(--light-grey);
-  cursor: pointer;
-}
-
-.intro {
-  height: 10vh;
-}
-
-.content {
-  height: 90vh;
-}
-
-/* Air quality specific content styling */
-.content#air {
-  display: flex;
-  flex-direction: column;
-  gap: 5rem;
-}
-
-
-.content .figure .bike-chart {
-  height: 70vh;
-  /* Give it a reasonable height */
-  min-height: 300px;
-  /* Minimum height to prevent squeezing */
 }
