@@ -1,20 +1,15 @@
   document.addEventListener("DOMContentLoaded", () => {
 
   // Map button switching
-    document.querySelectorAll('.map-selector button').forEach(button => {
+  document.querySelectorAll('.map-selector button').forEach(button => {
     button.addEventListener('click', () => {
-    const selected = button.getAttribute('data-map');
-    document.querySelectorAll('.map-frame').forEach(frame => {
-      frame.classList.remove('active');
+      const selected = button.getAttribute('data-map');
+      document.querySelectorAll('.map-frame').forEach(frame => {
+        frame.classList.remove('active');
+      });
+      document.getElementById(selected).classList.add('active');
     });
-
-    const target = document.getElementById(selected);
-    if (target) {
-      target.classList.add('active');
-      target.offsetHeight; // forza il reflow
-    }
   });
-});
 
   // Chart.js setup
     const ctx1 = document.getElementById('streetChart').getContext('2d');
