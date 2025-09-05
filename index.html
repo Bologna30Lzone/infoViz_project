@@ -10,7 +10,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;800&display=swap" rel="stylesheet">
-  <script type="module" src="heatmaps.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
@@ -43,9 +42,7 @@
       <section class="panel" data-label="Q. 1" data-module="bar">
         <div class="panel-inner">
           <div class="kicker">QUESTION ONE</div>
-          <div class="kicker">BEFORE AND AFTER 30-ZONE</div>
           <div class="headline"><span class="accent">Before</span> and After 30-Zone</div>
-          <div class="lede">How have different zones been affected by the new law?</div>
           <!--<div class="map-selector">
             <button data-map="map1">2019</button>
             <button data-map="map2">2020</button>
@@ -66,7 +63,7 @@
                 <button data-map="map6">2024</button>
                 <button data-map="map7">2025</button>
               </div>
-              <<figure class="figure">
+              <figure class="figure">
                 <div class="map-container">
                   <iframe class="map-frame" id="map1" src="./maps/heatmapVie2019.html"></iframe>
                   <iframe class="map-frame" id="map2" src="./maps/heatmapVie2020.html"></iframe>
@@ -113,22 +110,11 @@
 
           <figure class="figure">
             <div class="charts-grid">
-              <canvas id="chart" width="600" height="400"></canvas>
+              <div class="chart" width="600" height="400" data-type="30-vs-non30" data-csv-url="data/df_30vsnon30.csv"></div>
             </div>
             <figcaption class="caption">› 2024 ‹</figcaption>
           </figure>
 
-          <aside class="sidebar">
-            <h3>Notes</h3>
-            <p>Etiam porta sem malesuada magna mollis euismod.</p>
-          </aside>
-
-          <div class="footer">
-            <div class="now-viewing">NOW VIEWING : Boulevard — Δ after policy −2%</div>
-            <div class="spark">
-              <div class="chart" data-type="spark"></div>
-            </div>
-          </div>
         </div>
       </section>
 

@@ -16,6 +16,7 @@ import { chartAirQuality } from './airQuality.js';
 import { chartEVShare }    from './evShare.js';
 import { chartBikeLine }   from './bikeLine.js';
 import { chartHeatmaps } from './heatmaps.js';
+import { chartThirtyVsNon30 } from './thirtyVsNon30.js';
 
 const registry = {
   line: chartLine,
@@ -26,6 +27,7 @@ const registry = {
   'ev-share':    chartEVShare,
   'bike-line':   chartBikeLine,
   'heatmaps': chartHeatmaps,
+  '30-vs-non30': chartThirtyVsNon30,
 };
 
 export async function mountChartsIn(panel){
