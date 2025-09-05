@@ -9,12 +9,17 @@ const COLORS = {
 };
 
 const gasInfo = {
-  PM10: "PM10",
-  "O3 (OZONO)": "O3",
-  "CO (MONOSSIDO DI CARBONIO)": "CO",
-  "NO2 (BIOSSIDO DI AZOTO)": "NO2",
-  "PM2.5": "PM2.5",
-  "C6H6 (BENZENE)": "C6H6",
+  PM10: "<strong>PM10</strong> are tiny airborne particles from sources like dust and traffic that can be inhaled, irritating the lungs and worsening respiratory and heart conditions. The introduction of Città 30 had little impact on their presence.",
+  "O3 (OZONO)":
+    "<strong>O₃ (ozone)</strong> at ground level is a harmful air pollutant formed by chemical reactions in sunlight, which can irritate the lungs, worsen asthma, and reduce overall respiratory function. The introduction of Città 30 has stressed the already existing pattern of the <strong>reduction of this gas.</strong>",
+  "CO (MONOSSIDO DI CARBONIO)":
+    "<strong>CO (carbon monoxide)</strong> is a colorless, odorless gas from incomplete combustion that harms oxygen delivery in the body, and its levels have been <strong>decreasing</strong> every year.",
+  "NO2 (BIOSSIDO DI AZOTO)":
+    "<strong>NO₂ (nitrogen dioxide)</strong> is a gas mainly produced by traffic and combustion processes, which can irritate the airways, worsen asthma, and contribute to smog and acid rain. Its levels have been gradually decreasing, but the introduction of Città 30 does not seem to have had a great effect.",
+  "PM2.5":
+    "<strong>PM2.5</strong> are fine particulate matter with a diameter of 2.5 micrometers or smaller, which can penetrate deep into the lungs and bloodstream, causing respiratory and cardiovascular problems. Their levels have been slowly decreasing, but the introduction of Città 30 appears to have had little impact.",
+  "C6H6 (BENZENE)":
+    "<strong>C₆H₆ (benzene)</strong> is a volatile organic compound mainly emitted by traffic and industrial processes, which can harm the blood, cause dizziness, and long-term exposure increases the risk of cancer. Its levels have been stable over the years and well under the EU threshold.",
 };
 
 const THRESHOLDS = {
@@ -426,7 +431,7 @@ export function chartAirQuality(container, d3) {
     .data(pollutantsOpt)
     .join("button")
     .attr("type", "button")
-    .attr("class", "small-buttons")
+    .attr("class", "graph-button")
     .text((d) => d.split(" ")[0])
     .classed("active", (d, i) => i === 0) // Set first button as active initially
     .on("click", function (event, d) {

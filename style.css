@@ -1,6 +1,5 @@
 :root {
-  --bg: #ffffff;
-  --ink: #0f172a;
+  --white: #ffffff;
   /* pure colors */
   --blue: #000831;
   --red: #C81515;
@@ -19,9 +18,29 @@ body {
 
 body {
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  background: var(--bg);
+  background: var(--white);
   color: var(--blue);
   font-size: 1.2rem;
+}
+
+.graph-button {
+  background-color: var(--white);
+  padding: 2px 5px;
+  border: 2px solid var(--light-grey);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.graph-button:hover {
+  background-color: var(--light-grey);
+}
+
+.graph-button.active {
+  background-color: var(--blue);
+  color: var(--white);
+  border-color: var(--blue);
 }
 
 /* Left vertical navbar */
@@ -66,10 +85,6 @@ body {
   text-decoration: underline;
 }
 
-.nav-item:focus-visible {
-  outline: 2px solid var(--red);
-  outline-offset: 2px;
-}
 
 /* Viewport + track */
 .viewport {
@@ -88,11 +103,7 @@ body {
   transition: transform 420ms cubic-bezier(.2, .8, .2, 1);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .track {
-    transition: none;
-  }
-}
+
 
 /* Top-right buttons */
 .top-right {
@@ -398,6 +409,7 @@ body {
 .map-selector {
   margin-bottom: 1rem;
 }
+
 .map-selector button {
   margin-right: 0.5rem;
   padding: 0.5rem 1rem;
@@ -408,6 +420,7 @@ body {
   position: relative;
   height: 100%;
 }
+
 .map-frame {
   display: none;
   width: 100%;
@@ -417,6 +430,7 @@ body {
   top: 0;
   left: 0;
 }
+
 .map-frame.active {
   display: block;
 }
@@ -425,4 +439,24 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.intro {
+  display: 10vh
+}
+
+.content {
+  display: 90vh;
+}
+
+.content#air {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition: none;
+  }
 }
