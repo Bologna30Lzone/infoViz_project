@@ -1,293 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dynamic Webpage with Interactive Maps & Charts</title>
-  <!-- Chart.js CDN -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carousel D3 Panels — Modular</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+  <script type="module" src="heatmaps.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body, html { height: 100%; font-family: Arial, sans-serif; }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      height: 100%;
-    }
-    .sidebar {
-      background: #2c3e50;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      padding: 1rem;
-    }
-    .sidebar button {
-      background: none;
-      border: none;
-      color: inherit;
-      text-align: left;
-      padding: 0.75rem;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.2s;
-    }
-    .sidebar button:hover, .sidebar button.active {
-      background: #34495e;
-    }
-    .content {
-      padding: 1rem;
-      overflow-y: auto;
-    }
-    .section {
-      display: none;
-      height: 100%;
-    }
-    .section.active {
-      display: block;
-    }
-
-    #map-section {
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      grid-gap: 1rem;
-      height: 100%;
-    }
-
-    .map-selector {
-      margin-bottom: 1rem;
-    }
-    .map-selector button {
-      margin-right: 0.5rem;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
-
-    .map-container {
-      position: relative;
-      height: 100%;
-    }
-    .map-frame {
-      display: none;
-      width: 100%;
-      height: 100%;
-      border: 1px solid #ccc;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    .map-frame.active {
-      display: block;
-    }
-
-    .info-container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-    .text-block {
-      flex: 1;
-      overflow-y: auto;
-      margin-bottom: 1rem;
-    }
-    .chart-block {
-      flex: 1;
-    }
-
-    :root {
-      --sidebar-width: 200px;
-      --section-gap: 1rem;
-    }
-  </style>
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="layout">
-    <nav class="sidebar">
-      <button class="tab-btn active" data-target="home-section">Home</button>
-      <button class="tab-btn" data-target="map-section">Mappe</button>
-      <button class="tab-btn" data-target="other-section">Altro</button>
-    </nav>
+  <!-- Left navbar -->
+  <nav class="navbar" aria-label="Quick navigation">
+    <div class="nav-list" id="quickNav"></div>
+  </nav>
 
-    <div class="content">
-      <section id="home-section" class="section active">
-        <h1>Benvenuto</h1>
-        <p>Questa è la sezione iniziale.</p>
-      </section>
+  <div class="viewport" id="viewport" aria-roledescription="carousel" aria-label="Slides">
+    <div class="top-right">
+      <button type="button" class="nav-btn" id="btnPrev" aria-label="Previous slide">◀</button>
+      <button type="button" class="nav-btn" id="btnNext" aria-label="Next slide">▶</button>
+    </div>
 
-      <section id="map-section" class="section">
-        <div class="map-selector">
-          <button data-map="map1">2019</button>
-          <button data-map="map2">2020</button>
-          <button data-map="map3">2021</button>
-          <button data-map="map4">2022</button>
-          <button data-map="map5">2023</button>
-          <button data-map="map6">2024</button>
-          <button data-map="map7">2025</button>
-        </div>
-        <div class="map-container">
-          <iframe class="map-frame" id="map1" src="./maps/heatmapVie2019.html"></iframe>
-          <iframe class="map-frame" id="map2" src="./maps/heatmapVie2020.html"></iframe>
-          <iframe class="map-frame" id="map3" src="./maps/heatmapVie2021.html"></iframe>
-          <iframe class="map-frame" id="map4" src="./maps/heatmapVie2022.html"></iframe>
-          <iframe class="map-frame" id="map5" src="./maps/heatmapVie2023.html"></iframe>
-          <iframe class="map-frame" id="map6" src="./maps/heatmapVie2024.html"></iframe>
-          <iframe class="map-frame" id="map7" src="./maps/heatmapVie2025.html"></iframe>
-        </div>
-
-        <div class="info-container">
-          <div class="text-block" id="text-content">
-            <h2>Dettagli Via Selezionata</h2>
-            <p>Seleziona una via sulla mappa per visualizzare i dati.</p>
-          </div>
-          <div class="chart-block">
-            <canvas id="streetChart"></canvas>
-          </div>
+    <div class="track" id="track">
+      <!-- HOME -->
+      <section class="panel home" data-label="HOME" data-module="none">
+        <div>
+          <h1>Home</h1>
+          <p>This is not the greatest paragraph in the world: This is just a Tribute</p>
         </div>
       </section>
 
-      <section id="other-section" class="section">
-        <h1>Sezione Altro</h1>
-        <p>Contenuti aggiuntivi qui.</p>
-        <canvas id="chart" width="600" height="400"></canvas>
+      <!-- Q1 -->
+      <section class="panel" data-label="Q. 1" data-module="bar">
+        <div class="panel-inner">
+          <div class="kicker">QUESTION ONE</div>
+          <div class="kicker">BEFORE AND AFTER 30-ZONE</div>
+          <div class="headline"><span class="accent">Before</span> and After 30-Zone</div>
+          <div class="lede">How have different zones been affected by the new law?</div>
+          <!--<div class="map-selector">
+            <button data-map="map1">2019</button>
+            <button data-map="map2">2020</button>
+            <button data-map="map3">2021</button>
+            <button data-map="map4">2022</button>
+            <button data-map="map5">2023</button>
+            <button data-map="map6">2024</button>
+            <button data-map="map7">2025</button>
+          </div>-->
+          <div class="content">
+            <div class="chart" data-type="heatmaps">
+              <div class="map-selector">
+                <button data-map="map1">2019</button>
+                <button data-map="map2">2020</button>
+                <button data-map="map3">2021</button>
+                <button data-map="map4">2022</button>
+                <button data-map="map5">2023</button>
+                <button data-map="map6">2024</button>
+                <button data-map="map7">2025</button>
+              </div>
+              <<figure class="figure">
+                <div class="map-container">
+                  <iframe class="map-frame" id="map1" src="./maps/heatmapVie2019.html"></iframe>
+                  <iframe class="map-frame" id="map2" src="./maps/heatmapVie2020.html"></iframe>
+                  <iframe class="map-frame" id="map3" src="./maps/heatmapVie2021.html"></iframe>
+                  <iframe class="map-frame" id="map4" src="./maps/heatmapVie2022.html"></iframe>
+                  <iframe class="map-frame" id="map5" src="./maps/heatmapVie2023.html"></iframe>
+                  <iframe class="map-frame" id="map6" src="./maps/heatmapVie2024.html"></iframe>
+                  <iframe class="map-frame" id="map7" src="./maps/heatmapVie2025.html"></iframe>
+                </div>
+                <figcaption class="caption">› 2022 ‹</figcaption>
+              </figure>
+            </div>
+            <div class="chart-block">
+              <canvas id="streetChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Q2 (uses your bike line chart) -->
+      <section class="panel" data-label="Q. 2" data-module="line">
+        <div class="panel-inner">
+          <div class="intro">
+            <div class="kicker">QUESTION TWO</div>
+            <div class="headline">BIKES</div>
+          </div>
+          <div class="content">
+
+            <figure class="figure">
+              <div class="bike-chart chart" data-type="bike-line"></div>
+            </figure>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Q3 -->
+      <section class="panel" data-label="Q. 3" data-module="bar">
+        <div class="panel-inner">
+          <div class="intro">
+            <div class="kicker">QUESTION THREE</div>
+            <div class="headline">This is question 3?</div>
+          </div>
+
+          <figure class="figure">
+            <div class="charts-grid">
+              <canvas id="chart" width="600" height="400"></canvas>
+            </div>
+            <figcaption class="caption">› 2024 ‹</figcaption>
+          </figure>
+
+          <aside class="sidebar">
+            <h3>Notes</h3>
+            <p>Etiam porta sem malesuada magna mollis euismod.</p>
+          </aside>
+
+          <div class="footer">
+            <div class="now-viewing">NOW VIEWING : Boulevard — Δ after policy −2%</div>
+            <div class="spark">
+              <div class="chart" data-type="spark"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Q4 -->
+      <section class="panel" data-label="Q. 4" data-module="bar">
+        <div class="panel-inner">
+          <div class="intro">
+            <div class="kicker">QUESTION FOUR</div>
+            <div class="headline">
+              How has <span class="accent">Air Quality</span> changed in the 30-zone?
+            </div>
+          </div>
+          <div class="content" id="air">
+            <figure class="figure wide-chart">
+              <div class="chart" data-type="air-quality" data-gas-url="data/gases.json" style="height:40vh"></div>
+              <div>
+
+                <h3>Air Quality</h3>
+                <p>We wanted to check if the new policy impacted air quality. In order to do that we used the data
+                  collected by 2 air quality stations in near the city center (Porta San Felice and Giardini
+                  Margherita).
+                  Different gases were measured, each with their own consequences and thresholds. The thresholds
+                  represent
+                  the guidelines imposed by the European Union (EU) and the World Health organization for air quality.
+                </p>
+                <p>There is no general trend observable across the different gases, each has a different behaviour
+                  through
+                  the years, find out more about each gas by clicking the buttons under the graph:</p>
+                <p id="gas-info">
+                  <strong>PM10</strong> are tiny airborne particles from sources like dust and traffic that can be
+                  inhaled, irritating
+                  the lungs and worsening respiratory and heart conditions. The introduction of Città 30 had little
+                  impact on their
+                  presence.
+                </p>
+              </div>
+            </figure>
+
+            <figure class="figure wide-chart chart-right">
+              <div>
+                <h3>Electric Vehicle Usage</h3>
+                <p>We also wanted to explore if there was some correlation between the change of air quality and the
+                  growth of electric car vehicles. While it is true that the growth is of car vehicle show a positive
+                  trend (+1% from 2019), the percentage over the the total count of cars is too little to have any
+                  significant impact. </p>
+              </div>
+              <div class="chart" data-type="ev-share" data-ev-url="data/electric.csv" style="height:30vh"></div>
+            </figure>
+
+          </div>
+      </section>
+
+      <!-- END -->
+      <section class="panel end" data-label="END" data-module="none">
+        <div>
+          <h1>End</h1>
+          <p>kill me pls</p>
+        </div>
       </section>
     </div>
+
+    <div id="announce" class="sr-only" aria-live="polite"></div>
   </div>
 
-  <script>
-  // Tab switching
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(btn.dataset.target).classList.add('active');
-    });
-  });
-
-  // Map button switching
-  document.querySelectorAll('.map-selector button').forEach(button => {
-    button.addEventListener('click', () => {
-      const selected = button.getAttribute('data-map');
-      document.querySelectorAll('.map-frame').forEach(frame => {
-        frame.classList.remove('active');
-      });
-      document.getElementById(selected).classList.add('active');
-    });
-  });
-
-  // Chart.js setup
-  const ctx1 = document.getElementById('streetChart').getContext('2d');
-  let streetChart = new Chart(ctx1, {
-    type: 'line',
-    data: { labels: [], datasets: [{ label: 'Totale Giornaliero', data: [] }] },
-    options: { responsive: true, maintainAspectRatio: false }
-  });
-
-  // Funzione per normalizzare i nomi delle vie
-  function normalizeName(s) {
-    return s.toLowerCase()
-            .normalize("NFKD")
-            .replace(/[\u0300-\u036f]/g, '')
-            .trim();
-  }
-
-  // Handle messages from iframe maps
-  window.addEventListener('message', event => {
-    const { street } = event.data;
-    if (!street) return;
-
-    const normalized = normalizeName(street);
-    console.log("Ricevuto nome via normalizzato:", normalized);
-
-    fetch('./data/flusso_per_html_veicoli_per_trimestri.csv')
-      .then(res => res.text())
-      .then(text => {
-        const [headerLine, ...lines] = text.trim().split('\n');
-        const headers = headerLine.split(',');
-        const rows = lines.map(line => {
-          const cols = line.split(',');
-          const obj = {};
-          headers.forEach((h, i) => obj[h.trim()] = cols[i].trim());
-          return {
-            stname: normalizeName(obj.stname),
-            period: +obj.period,
-            order: +obj.order,
-            label: obj.label,
-            tot_day: +obj.tot_day
-          };
-        });
-
-        const sel = rows
-          .filter(r => r.stname === normalized)
-          .sort((a, b) => a.order - b.order);
-
-        if (sel.length === 0) {
-          console.warn(`Nessun dato trovato per la via: ${normalized}`);
-          return;
-        }
-
-        const labels = sel.map(r => r.period === 1 ? r.label : '');
-        const data = sel.map(r => r.tot_day);
-
-        document.getElementById('text-content').innerHTML =
-          `<h2>${street}</h2><p>Dati trimestrali da CSV</p>`;
-
-        streetChart.data.labels = labels;
-        streetChart.data.datasets[0].data = data;
-        streetChart.update();
-      })
-      .catch(err => console.error('Errore nel fetch del CSV:', err));
-  }, false);
-
-
-
-  // PER SEZIONE 2 (30 VS NON 30)
-  async function loadCSV(url) {
-      const response = await fetch(url);
-      const text = await response.text();
-      const lines = text.trim().split("\n");
-      
-      // Rimuove l'header e prende la prima riga di dati
-      lines.shift();
-      const [cars30, bikes30, carsAbove30, bikesAbove30] = lines[0].split(",").map(Number);
-
-      return [cars30, bikes30, carsAbove30, bikesAbove30];
-    }
-
-    async function drawChart() {
-      const data = await loadCSV("./data/df_30vsnon30.csv");
-
-      new Chart(document.getElementById('chart'), {
-        type: 'bar',
-        data: {
-          labels: [
-            'Cars (≤ 30 km/h)',
-            'Bikes (≤ 30 km/h)',
-            'Cars (> 30 km/h)',
-            'Bikes (> 30 km/h)'
-          ],
-          datasets: [{
-            label: 'Traffico medio',
-            data: data,
-            backgroundColor: [
-              'rgba(54, 162, 235, 0.7)', // auto ≤ 30
-              'rgba(255, 99, 132, 0.7)', // bici ≤ 30
-              'rgba(54, 162, 235, 0.7)', // auto > 30
-              'rgba(255, 99, 132, 0.7)'  // bici > 30
-            ]
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
-      });
-    }
-
-    drawChart();
-</script>
+  <!-- App (module) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
+
 </html>
