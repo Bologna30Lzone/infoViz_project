@@ -170,13 +170,26 @@ export function chartAirQuality(container, d3) {
     }
   }
 
-  function draw2024Line(xScale, chartType = "time") {
+  function draw2024Line(xScale, chartType = "time", pollutantType = null) {
     // Remove any existing 2024 elements
     g.selectAll(".zona30-line").remove();
     g.selectAll(".zona30-label").remove();
     g.selectAll(".zona30-area").remove();
 
-    const x2023 = xScale(new Date(2023, 2, 0));
+    let x2023;
+    if (chartType === "band") {
+      // For band scale, use year number and position between 2023 and 2024
+      const x2023Band = xScale(2023);
+      const x2024Band = xScale(2024);
+      if (x2023Band !== undefined && x2024Band !== undefined) {
+        x2023 = x2023Band + xScale.bandwidth(); // End of 2023 bar
+      } else if (x2023Band !== undefined) {
+        x2023 = x2023Band + xScale.bandwidth();
+      }
+    } else {
+      // For time scale, use Date object
+      x2023 = xScale(new Date(2023, 2, 0));
+    }
 
     if (x2023 !== undefined && x2023 >= 0 && x2023 <= w) {
       // Create a rectangle covering the area from 2024 to the right edge
@@ -190,12 +203,15 @@ export function chartAirQuality(container, d3) {
         .attr("stroke", "none")
         .lower(); // Put it behind the data lines
 
+      // Position label at top for ozone, bottom for others
+      const labelY = pollutantType === "O3 (OZONO)" ? 20 : h - 10;
+
       // Add label at the left edge of the colored area
       const label = g
         .append("text")
         .attr("class", "zona30-label")
         .attr("x", x2023 + 4)
-        .attr("y", h - 10)
+        .attr("y", labelY)
         .style("font-size", "12px")
         .style("font-weight", "bold")
         .attr("fill", "#f3f4f6")
@@ -254,7 +270,7 @@ export function chartAirQuality(container, d3) {
       .attr("height", (d) => y(0) - y(d.value));
 
     drawThresholds(y, "O3 (OZONO)");
-    draw2024Line(x0, "band");
+    draw2024Line(x0, "band", "O3 (OZONO)");
     drawLegend(stationsOpt);
   }
 

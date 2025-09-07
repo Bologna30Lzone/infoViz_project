@@ -43,6 +43,11 @@ body {
   border-color: var(--blue);
 }
 
+.graph-button:focus {
+  outline: none;
+
+}
+
 /* Left vertical navbar */
 .navbar {
   background: var(--white);
@@ -78,6 +83,13 @@ body {
   align-items: center;
   justify-content: center;
   font-family: inherit;
+  outline: none;
+  /* Remove focus outline */
+}
+
+.nav-item:focus {
+  outline: none;
+  /* Ensure no outline on focus */
 }
 
 .nav-item[aria-current="true"] {
