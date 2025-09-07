@@ -199,6 +199,10 @@ ul li::marker {
   color: var(--red);
 }
 
+p .accent {
+  font-weight: 700;
+}
+
 .lede {
   grid-column: 1 / 2;
   margin-top: -6px;
