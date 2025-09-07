@@ -24,7 +24,7 @@ export function chartBikeLine(container, d3) {
   const parseDate = d3.timeParse("%Y-%m-%d");
   const selectedStations = new Set(["Ercolani", "Sabotino", "San Donato"]);
   const startDate = parseDate("2019-01-01");
-  const markerDate = parseDate("2024-01-01");
+  const markerDate = parseDate("2023-02-01");
 
   function aggregateSemiannual(rows) {
     // Map + filter
@@ -126,19 +126,28 @@ export function chartBikeLine(container, d3) {
       .attr("cy", (d) => y(d.mean))
       .attr("r", 4);
 
-    // Città 30 marker
+    // Città 30 marker - colored area from 2024 to the right
     const mx = x(markerDate);
-    g.append("line")
-      .attr("class", "zona30-line")
-      .attr("x1", mx)
-      .attr("x2", mx)
-      .attr("y1", 0)
-      .attr("y2", h);
 
+    // Create a rectangle covering the area from 2024 to the right edge
+    g.append("rect")
+      .attr("class", "zona30-area")
+      .attr("x", mx)
+      .attr("y", 0)
+      .attr("width", w - mx) // From marker to right edge
+      .attr("height", h)
+      .attr("fill", "rgba(200, 200, 200, 0.3)") // Light gray with transparency
+      .attr("stroke", "none")
+      .lower(); // Put it behind the data lines
+
+    // Add label at the left edge of the colored area
     g.append("text")
       .attr("class", "zona30-label")
       .attr("x", mx + 5)
-      .attr("y", -5)
+      .attr("y", 15)
+      .style("font-size", "12px")
+      .style("font-weight", "bold")
+      .attr("fill", "#f3f4f6;")
       .text("Città 30");
   }
 
