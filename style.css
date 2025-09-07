@@ -500,10 +500,15 @@ p.accent, li .accent {
   justify-content: center;
   flex-direction: column;
 }
+
 .bike-text {
   display: flex;
-  justify-content: center;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+#bike1 h3 {
+  font-size: 5rem;
 }
 
 .content {
