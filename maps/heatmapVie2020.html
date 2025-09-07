@@ -574,44 +574,34 @@
         .text("Average traffic in the year 2020");
     
     geo_json_b0e6470726aad410a5f2a60789fbeb49.eachLayer(function(layer) {
-                layer.on('click', function(e) {
-                    const props = layer.feature.properties;
-                    if (props && props.stname) {
-                        onStreetClick(props.stname);
+    if (layer.feature && layer.feature.properties && layer.feature.properties.stname) {
+        layer.on('click', function () {
+            const streetName = layer.feature.properties.stname;
+            console.log('Clicked street:', streetName);
+            // invia messaggio al parent (dove c'è il grafico)
+            window.parent.postMessage({ street: streetName }, '*');
+        });
+    }
+});
+
+window.addEventListener('load', () => {
+    for (let key in window) {
+        if (window[key] && typeof window[key].eachLayer === 'function') {
+            try {
+                window[key].eachLayer(layer => {
+                    if (layer.feature && layer.feature.properties && layer.feature.properties.stname) {
+                        layer.on('click', function () {
+                            const streetName = layer.feature.properties.stname;
+                            console.log('Clicked street:', streetName);
+                            window.parent.postMessage({ street: streetName }, '*');
+                        });
                     }
                 });
-            });
-    window.addEventListener('load', () => {
-        for (let key in window) {
-        if (window[key] && window[key].eachLayer) {
-            try {
-            window[key].eachLayer(layer => {
-                if (layer.feature && layer.feature.properties && layer.feature.properties.stname) {
-                layer.on('click', function () {
-                    const streetName = layer.feature.properties.stname;
-                    console.log('Clicked street:', streetName);
-                    window.parent.postMessage({ street: streetName }, '*');
-                });
-                }
-            });
             } catch (e) {
+                console.warn('Errore nel ciclo eachLayer:', e);
             }
         }
-        }
-    });
-    
-    setTimeout(() => {
-    document.querySelectorAll(".leaflet-interactive").forEach(el => {
-    el.addEventListener("click", () => {
-      try {
-        const props = el.__data__.feature.properties;
-        if (!props || !props.stname) return;
-        window.parent.postMessage({ street: props.stname }, "*");
-      } catch (e) {
-        console.error("Error extracting properties:", e);
-      }
-    });
-  });
-}, 500);
+    }
+});
 </script>
 </html>

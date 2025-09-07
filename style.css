@@ -170,6 +170,7 @@ body {
   font-size: 28px;
   letter-spacing: .05em;
   text-transform: uppercase;
+  height: 1em
 }
 
 .headline .accent {
@@ -188,7 +189,7 @@ body {
   grid-column: 1 / 2;
   grid-row: auto;
   background: white;
-
+  height:100%;
   /* layout: two children side-by-side */
   display: grid;
   grid-template-columns: auto auto;
