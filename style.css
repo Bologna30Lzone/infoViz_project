@@ -500,6 +500,11 @@ p .accent {
   justify-content: center;
   flex-direction: column;
 }
+.bike-text {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
 
 .content {
   height: 95vh;
