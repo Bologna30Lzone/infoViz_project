@@ -199,7 +199,7 @@ ul li::marker {
   color: var(--red);
 }
 
-p.accent, li .accent {
+p .accent, li .accent {
   font-weight: 700;
 }
 
