@@ -45,6 +45,7 @@ body {
 
 /* Left vertical navbar */
 .navbar {
+  background: var(--white);
   position: fixed;
   inset: 0 auto 0 0;
   width: 10vw;
@@ -398,8 +399,8 @@ body {
 
 .map-selector {
   margin: 0.5rem auto;
-  display: flex; 
-  gap: 8px; 
+  display: flex;
+  gap: 8px;
   justify-content: center;
 }
 
@@ -465,22 +466,22 @@ body {
 
 .content#bike {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 90vh;
   overflow: hidden;
   /* Prevent overflow issues */
 }
 
 .bike-text {
-  width: 40%;
-  padding-right: 2rem;
+  width: 80%;
+  padding-top: 1rem;
   /* Add some spacing between text and chart */
 }
 
 /* Ensure bike chart container takes remaining space properly */
 .content#bike .figure {
   height: 100%;
-  width: 50%;
+  width: 100%;
   display: flex;
   align-items: stretch;
 }
