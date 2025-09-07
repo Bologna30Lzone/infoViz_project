@@ -7,7 +7,9 @@ export function chartBikeLine(container, d3) {
   if (!d3) return { dispose() {} };
 
   const host = d3.select(container).classed("bike-chart", true);
+
   const { width, height } = sizeOf(container, 960, 500);
+  console.log(width, height);
   const margin = { top: 20, right: 30, bottom: 50, left: 60 };
   const w = width - margin.left - margin.right;
   const h = height - margin.top - margin.bottom;
