@@ -65,6 +65,47 @@ export function chartHeatmaps(container /* d3 not required */) {
   let fixedYMax = null;
   let fixedYStep = null;
 
+  // Custom plugin to draw the "città30" label
+  const citta30Plugin = {
+    id: "citta30Label",
+    afterDraw: function (chart) {
+      const ctx = chart.ctx;
+      const chartArea = chart.chartArea;
+
+      // Find gray area start position
+      let grayStartIndex = -1;
+      const labels = chart.data.labels;
+      for (let i = 0; i < labels.length; i++) {
+        // Check if we have a background dataset with data at this position
+        const backgroundDataset = chart.data.datasets.find(
+          (ds) => ds.order === 3
+        );
+        if (backgroundDataset && backgroundDataset.data[i] !== null) {
+          grayStartIndex = i;
+          break;
+        }
+      }
+
+      if (grayStartIndex >= 0) {
+        const xScale = chart.scales.x;
+
+        // Calculate position for the label
+        const startX = xScale.getPixelForValue(grayStartIndex);
+        const endX = chartArea.right;
+        const labelX = startX + (endX - startX) / 2; // Center of gray area
+        const labelY = chartArea.top + 20; // Near the top
+
+        // Draw the label
+        ctx.save();
+        ctx.fillStyle = "#666";
+        ctx.font = "bold 14px IBM Plex Mono";
+        ctx.textAlign = "center";
+        ctx.fillText("Città 30", labelX, labelY);
+        ctx.restore();
+      }
+    },
+  };
+
   const lineChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -162,6 +203,7 @@ export function chartHeatmaps(container /* d3 not required */) {
       // Prevent animations from trying to rescale axes on dataset change
       animation: { duration: 250 },
     },
+    plugins: [citta30Plugin],
   });
 
   // 5) Load CSV once and prepare data

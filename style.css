@@ -45,6 +45,7 @@ body {
 
 /* Left vertical navbar */
 .navbar {
+  background: var(--white);
   position: fixed;
   inset: 0 auto 0 0;
   width: 10vw;
@@ -267,14 +268,12 @@ body {
 .bike-chart {
   position: relative;
   width: 100%;
-  height: 70%;
-
+  height: 100%;
+  /* Use full available height from figure */
 }
 
 .bike-chart svg {
   display: block;
-
-
 }
 
 .bike-chart .axis path,
@@ -398,8 +397,8 @@ body {
 
 .map-selector {
   margin: 0.5rem auto;
-  display: flex; 
-  gap: 8px; 
+  display: flex;
+  gap: 8px;
   justify-content: center;
 }
 
@@ -433,19 +432,37 @@ body {
   display: block;
 }
 
-.info-container {
+.content2 {
   display: flex;
-  flex-direction: column;
-  height: 100%;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
 }
 
+#chart-text {
+  display: flex;
+  justify-content: center;
+  width: 30%;
+}
+
+#chart-text p {
+  margin: auto;
+}
+
+.chart-block {
+  width: 70%;
+}
+
+.q1 p {
+  margin: auto;
+}
 
 .intro {
-  height: 10vh
+  height: 5vh
 }
 
 .content {
-  height: 90vh;
+  height: 95vh;
 }
 
 .content#air {
@@ -465,22 +482,24 @@ body {
 
 .content#bike {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 90vh;
   overflow: hidden;
-  /* Prevent overflow issues */
+  gap: 1rem;
+  /* Add gap between chart and text */
 }
 
 .bike-text {
-  width: 40%;
-  padding-right: 2rem;
-  /* Add some spacing between text and chart */
+  width: 100%;
+  /* Remove excessive padding */
 }
 
-/* Ensure bike chart container takes remaining space properly */
+/* Ensure bike chart container takes appropriate space */
 .content#bike .figure {
-  height: 100%;
-  width: 50%;
+  height: 60vh;
+  /* Set specific height instead of 100% */
+  width: 100%;
   display: flex;
-  align-items: stretch;
+  padding: 2rem;
+  align-items: flex-start;
 }
