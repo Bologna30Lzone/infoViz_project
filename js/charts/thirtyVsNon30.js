@@ -27,12 +27,12 @@ export function chartThirtyVsNon30(container) {
     const lines = text.trim().split(/\r?\n/);
     if (!lines.length) throw new Error("Empty CSV");
     lines.shift(); // rimuove header
-    const row = (lines[0] || "").split(",").map(v => Number(v.trim()));
-    const [cars30=0, bikes30=0, carsAbove30=0, bikesAbove30=0] = row;
+    const row = (lines[0] || "").split(",").map((v) => Number(v.trim()));
+    const [cars30 = 0, bikes30 = 0, carsAbove30 = 0, bikesAbove30 = 0] = row;
 
     return {
       cars: [cars30, carsAbove30],
-      bikes: [bikes30, bikesAbove30]
+      bikes: [bikes30, bikesAbove30],
     };
   }
 
@@ -51,35 +51,47 @@ export function chartThirtyVsNon30(container) {
               label: "Cars",
               data: data.cars,
               backgroundColor: "rgba(0, 145, 110, 0.7)",
-              borderWidth: 0
+              borderWidth: 0,
             },
             {
               label: "Bikes",
               data: data.bikes,
               backgroundColor: "rgba(243, 182, 31, 0.7)",
-              borderWidth: 0
-            }
-          ]
+              borderWidth: 0,
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
             legend: { display: true, position: "top" },
-            tooltip: { mode: "index", intersect: false }
+            tooltip: { mode: "index", intersect: false },
           },
           scales: {
             x: {
-              ticks: { autoSkip: false },
-              grid: { display: false } // rimuove griglia sull'asse X
+              ticks: {
+                autoSkip: false,
+                color: "#000831", // axis tick color
+              },
+              border: {
+                color: "#000831", // axis line color
+              },
+              grid: { display: false }, // rimuove griglia sull'asse X
             },
             y: {
               beginAtZero: true,
-              ticks: { precision: 0 },
-              grid: { display: false } // rimuove griglia sull'asse Y
-            }
-          }
-        }
+              ticks: {
+                precision: 0,
+                color: "#000831", // axis tick color
+              },
+              border: {
+                color: "#000831", // axis line color
+              },
+              grid: { display: false }, // rimuove griglia sull'asse Y
+            },
+          },
+        },
       });
     } catch (err) {
       console.error("[30-vs-non30] Failed to draw:", err);
@@ -92,8 +104,10 @@ export function chartThirtyVsNon30(container) {
   return {
     dispose() {
       aborted = true;
-      try { chart?.destroy(); } catch {}
+      try {
+        chart?.destroy();
+      } catch {}
       canvas.remove();
-    }
+    },
   };
 }
