@@ -442,15 +442,22 @@ body {
 }
 
 #chart-text {
-  width: 50%;
-}
-
-.info-container {
   display: flex;
-  flex-direction: column;
-  height: 100%;
+  justify-content: center;
+  width: 30%;
 }
 
+#chart-text p {
+  margin: auto;
+}
+
+.chart-block {
+  width: 70%;
+}
+
+.q1 p {
+  margin: auto;
+}
 
 .intro {
   height: 5vh
