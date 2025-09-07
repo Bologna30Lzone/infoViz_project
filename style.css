@@ -268,14 +268,12 @@ body {
 .bike-chart {
   position: relative;
   width: 100%;
-  height: 70%;
-
+  height: 100%;
+  /* Use full available height from figure */
 }
 
 .bike-chart svg {
   display: block;
-
-
 }
 
 .bike-chart .axis path,
@@ -480,19 +478,21 @@ body {
   flex-direction: column;
   height: 90vh;
   overflow: hidden;
-  /* Prevent overflow issues */
+  gap: 1rem;
+  /* Add gap between chart and text */
 }
 
 .bike-text {
-  width: 80%;
-  padding-top: 1rem;
-  /* Add some spacing between text and chart */
+  width: 100%;
+  /* Remove excessive padding */
 }
 
-/* Ensure bike chart container takes remaining space properly */
+/* Ensure bike chart container takes appropriate space */
 .content#bike .figure {
-  height: 100%;
+  height: 60vh;
+  /* Set specific height instead of 100% */
   width: 100%;
   display: flex;
-  align-items: stretch;
+  padding: 2rem;
+  align-items: flex-start;
 }
