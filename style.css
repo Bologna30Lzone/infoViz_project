@@ -456,7 +456,7 @@ body {
 }
 
 #chart-text p {
-  margin: auto;
+  margin: 0.5rem auto;
 }
 
 .chart-block {
@@ -464,7 +464,7 @@ body {
 }
 
 .q1 p {
-  margin: auto;
+  margin: 0.1rem auto;
 }
 
 .intro {
