@@ -46,6 +46,11 @@ ul li::marker {color: var(--red);}
   border-color: var(--blue);
 }
 
+.graph-button:focus {
+  outline: none;
+
+}
+
 /* Left vertical navbar */
 .navbar {
   background: var(--white);
@@ -81,6 +86,13 @@ ul li::marker {color: var(--red);}
   align-items: center;
   justify-content: center;
   font-family: inherit;
+  outline: none;
+  /* Remove focus outline */
+}
+
+.nav-item:focus {
+  outline: none;
+  /* Ensure no outline on focus */
 }
 
 .nav-item[aria-current="true"] {
@@ -398,6 +410,10 @@ ul li::marker {color: var(--red);}
   width: 50%;
 }
 
+#map-text p {
+  margin: 2rem auto;
+}
+
 .map-selector {
   margin: 0.5rem auto;
   display: flex;
@@ -443,19 +459,18 @@ ul li::marker {color: var(--red);}
 }
 
 #chart-text {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   width: 30%;
 }
 
 #chart-text p {
-  margin: auto;
+  margin: 0.5rem auto;
 }
 
 .chart-block {
   width: 70%;
-}
-
-.q1 p {
-  margin: auto;
 }
 
 .intro {
