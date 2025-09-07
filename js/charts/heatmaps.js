@@ -136,7 +136,7 @@ export function chartHeatmaps(container /* d3 not required */) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: { mode: 'none' }, // Disable all interactions
+      interaction: { mode: "none" }, // Disable all interactions
       plugins: {
         legend: {
           display: true,
@@ -155,7 +155,7 @@ export function chartHeatmaps(container /* d3 not required */) {
           },
         },
         tooltip: {
-          enabled: false // Disable tooltips
+          enabled: false, // Disable tooltips
         },
       },
       scales: {
@@ -170,11 +170,11 @@ export function chartHeatmaps(container /* d3 not required */) {
               return raw.length >= 5 ? "" : raw; // hide labels with 5+ characters
             },
           },
-          grid: { 
+          grid: {
             display: true,
             drawOnChartArea: false, // Don't draw grid lines across the chart
             tickLength: 5,
-            tickColor: "#000831"
+            tickColor: "#000831",
           },
           border: { color: "#000831" },
         },
@@ -190,11 +190,11 @@ export function chartHeatmaps(container /* d3 not required */) {
               return Number.isFinite(val) ? val : val;
             },
           },
-          grid: { 
+          grid: {
             display: true,
             drawOnChartArea: false, // Don't draw grid lines across the chart
             tickLength: 5,
-            tickColor: "#000831"
+            tickColor: "#000831",
           },
           border: { color: "#000831" },
         },

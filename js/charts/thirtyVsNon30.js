@@ -64,9 +64,10 @@ export function chartThirtyVsNon30(container) {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: { mode: "none" }, // Disable all interactions
           plugins: {
             legend: { display: true, position: "top" },
-            tooltip: { mode: "index", intersect: false },
+            tooltip: { enabled: false }, // Disable tooltips
           },
           scales: {
             x: {
