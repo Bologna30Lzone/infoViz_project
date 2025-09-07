@@ -24,7 +24,7 @@ export function chartBikeLine(container, d3) {
   const parseDate = d3.timeParse("%Y-%m-%d");
   const selectedStations = new Set(["Ercolani", "Sabotino", "San Donato"]);
   const startDate = parseDate("2019-01-01");
-  const markerDate = parseDate("2023-02-01");
+  const markerDate = parseDate("2023-08-01");
 
   function aggregateSemiannual(rows) {
     // Map + filter

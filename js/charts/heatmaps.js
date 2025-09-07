@@ -9,25 +9,26 @@
 // Columns used: stname, order, label ("YYYY-1"/"YYYY-2"), period (1/2), tot_day (number)
 
 export function chartHeatmaps(container /* d3 not required */) {
-  const panel = container.closest('.panel') || document;
+  const panel = container.closest(".panel") || document;
 
   // 1) Target the pre-existing canvas
-  const lineCanvas = panel.querySelector('#streetChart');
+  const lineCanvas = panel.querySelector("#streetChart");
   if (!lineCanvas) {
-    console.warn('[heatmaps] #streetChart canvas not found in this panel');
+    console.warn("[heatmaps] #streetChart canvas not found in this panel");
     return { dispose() {} };
   }
-  if (!lineCanvas.style.height) lineCanvas.style.height = '36vh';
+  if (!lineCanvas.style.height) lineCanvas.style.height = "36vh";
 
   // 2) Data URL (can be overridden by data-flow-url on the container)
   const flowURL =
-    container.dataset.flowUrl || './data/flusso_per_html_veicoli_per_trimestri.csv';
+    container.dataset.flowUrl ||
+    "./data/flusso_per_html_veicoli_per_trimestri.csv";
 
   // 3) Helpers
   const norm = (s) =>
-    String(s || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+    String(s || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
       .trim();
 
@@ -48,7 +49,7 @@ export function chartHeatmaps(container /* d3 not required */) {
 
   // Turn "2019-1" / "20192" into "2019-H1" (and "...-H2") — for tooltips
   const formatHalfLabel = (label) => {
-    const s = String(label || '');
+    const s = String(label || "");
     const m = s.match(/^(\d{4})[-\s]?([12])$/); // matches "2019-1", "2019 2", "20192"
     if (m) return `${m[1]}-H${m[2]}`;
     return s;
@@ -57,7 +58,7 @@ export function chartHeatmaps(container /* d3 not required */) {
   // 4) Build the chart with two datasets:
   //    - Average across all streets (red) — always visible
   //    - Selected street (blue) — overlays when a street is clicked
-  const ctx = lineCanvas.getContext('2d');
+  const ctx = lineCanvas.getContext("2d");
 
   // We'll set y.min / y.max only after we scan the CSV once.
   let fixedYMin = 0;
@@ -65,66 +66,69 @@ export function chartHeatmaps(container /* d3 not required */) {
   let fixedYStep = null;
 
   const lineChart = new Chart(ctx, {
-    type: 'line',
+    type: "line",
     data: {
       labels: [],
       datasets: [
         {
-          label: 'City-wide Average',
+          label: "City-wide Average",
           data: [],
-          borderColor: '#C81515',
-          backgroundColor: 'rgba(255,0,0,0.15)',
+          borderColor: "#C81515",
+          backgroundColor: "rgba(255,0,0,0.15)",
           fill: false,
           tension: 0,
           pointRadius: 2,
-          order: 1
+          order: 1,
         },
         {
-          label: '', // empty so it's filtered out of legend when no data
+          label: "", // empty so it's filtered out of legend when no data
           data: [],
-          borderColor: '#00916E',
-          backgroundColor: 'rgba(54, 162, 235, 0.15)',
+          borderColor: "#00916E",
+          backgroundColor: "rgba(54, 162, 235, 0.15)",
           fill: false,
           tension: 0,
           pointRadius: 2,
-          order: 2
-        }
-      ]
+          order: 2,
+        },
+      ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: { mode: 'nearest', intersect: false },
+      interaction: { mode: "nearest", intersect: false },
       plugins: {
         legend: {
           display: true,
           labels: {
             // Hide the street-specific dataset from legend when it has only nulls or empty label
+            // Also hide background area dataset
             filter: function (legendItem, chartData) {
               const ds = chartData.datasets[legendItem.datasetIndex];
               if (!ds || !ds.data) return false;
               if (!ds.label) return false;
+              // Hide background area dataset (order: 3)
+              if (ds.order === 3) return false;
               return ds.data.some((v) => v != null);
-            }
-          }
+            },
+          },
         },
         tooltip: {
-          mode: 'index',
+          mode: "index",
           intersect: false,
           callbacks: {
             // Show "YYYY-H1/H2" as the tooltip title
             title: (items) => {
-              const raw = items?.[0]?.label ?? '';
+              const raw = items?.[0]?.label ?? "";
               return formatHalfLabel(raw);
             },
             // Dataset label + localized value
             label: (ctx) => {
-              const ds = ctx.dataset?.label ?? '';
+              const ds = ctx.dataset?.label ?? "";
               const y = ctx.parsed?.y;
-              return `${ds}: ${y != null ? y.toLocaleString('it-IT') : '—'}`;
-            }
-          }
-        }
+              return `${ds}: ${y != null ? y.toLocaleString("it-IT") : "—"}`;
+            },
+          },
+        },
       },
       scales: {
         x: {
@@ -133,11 +137,12 @@ export function chartHeatmaps(container /* d3 not required */) {
             autoSkip: true,
             callback: function (value) {
               const labels = this.chart?.data?.labels || [];
-              const raw = String(labels[value] ?? '');
-              return raw.length >= 5 ? '' : raw; // hide labels with 5+ characters
-            }
+              const raw = String(labels[value] ?? "");
+              return raw.length >= 5 ? "" : raw; // hide labels with 5+ characters
+            },
           },
-          grid: { display: true }
+          grid: { display: false },
+          border: { color: "#000831" },
         },
         y: {
           beginAtZero: true,
@@ -148,13 +153,15 @@ export function chartHeatmaps(container /* d3 not required */) {
             // stepSize: fixedYStep,
             callback: function (val) {
               return Number.isFinite(val) ? val : val;
-            }
-          }
-        }
+            },
+          },
+          grid: { display: false },
+          border: { color: "#000831" },
+        },
       },
       // Prevent animations from trying to rescale axes on dataset change
-      animation: { duration: 250 }
-    }
+      animation: { duration: 250 },
+    },
   });
 
   // 5) Load CSV once and prepare data
@@ -174,7 +181,7 @@ export function chartHeatmaps(container /* d3 not required */) {
         error: reject,
         step: (res) => {
           if (!aborted) rows.push(res.data);
-        }
+        },
       });
     });
   }
@@ -194,9 +201,9 @@ export function chartHeatmaps(container /* d3 not required */) {
       const desiredLabels = 6; // total labels: 0..max (change to taste)
       const intervals = Math.max(1, desiredLabels - 1);
       const rawStep = globalMax / intervals;
-      fixedYStep = niceCeil(rawStep);      // nice step >= raw step
-      fixedYMin  = 0;
-      fixedYMax  = fixedYStep * intervals; // ensures evenly spaced labels incl. top
+      fixedYStep = niceCeil(rawStep); // nice step >= raw step
+      fixedYMin = 0;
+      fixedYMax = fixedYStep * intervals; // ensures evenly spaced labels incl. top
 
       // Inject fixed y scale & ticks
       lineChart.options.scales.y.min = fixedYMin;
@@ -207,14 +214,17 @@ export function chartHeatmaps(container /* d3 not required */) {
       const aggByOrder = new Map(); // order → { sum, count, label }
       for (const r of rows) {
         const ord = Number(r.order ?? 0);
-        if (!aggByOrder.has(ord)) aggByOrder.set(ord, { sum: 0, count: 0, label: r.label });
+        if (!aggByOrder.has(ord))
+          aggByOrder.set(ord, { sum: 0, count: 0, label: r.label });
         const a = aggByOrder.get(ord);
         a.sum += Number(r.tot_day ?? 0);
         a.count += 1;
         if (!a.label && r.label) a.label = r.label;
       }
       avgOrders = Array.from(aggByOrder.keys()).sort((a, b) => a - b);
-      const avgLabels = avgOrders.map((o) => aggByOrder.get(o).label ?? String(o));
+      const avgLabels = avgOrders.map(
+        (o) => aggByOrder.get(o).label ?? String(o)
+      );
       const avgValues = avgOrders.map((o) => {
         const a = aggByOrder.get(o);
         return a.count ? a.sum / a.count : null;
@@ -230,18 +240,56 @@ export function chartHeatmaps(container /* d3 not required */) {
       }
       seriesByStreet = new Map();
       for (const [k, omap] of tmpStreet) {
-        const aligned = avgOrders.map((o) => (omap.has(o) ? omap.get(o) : null));
+        const aligned = avgOrders.map((o) =>
+          omap.has(o) ? omap.get(o) : null
+        );
         seriesByStreet.set(k, aligned);
+      }
+
+      // --- Find the index where 2023-1 starts for gray background area ---
+      let grayStartIndex = -1;
+      for (let i = 0; i < avgOrders.length; i++) {
+        if (avgOrders[i] >= 20232) {
+          // 2023-1 corresponds to order 20231
+          grayStartIndex = i;
+          break;
+        }
+      }
+
+      // --- Create background area data for gray shading from 2023-1 onwards ---
+      let backgroundData = [];
+      if (grayStartIndex >= 0) {
+        backgroundData = avgLabels.map((label, index) => {
+          if (index >= grayStartIndex) {
+            return fixedYMax; // Fill to the top of the chart
+          }
+          return null;
+        });
       }
 
       // --- Seed the chart with the average (red) only ---
       lineChart.data.labels = avgLabels;
       lineChart.data.datasets[0].data = avgValues; // average
       lineChart.data.datasets[1].data = new Array(avgValues.length).fill(null); // no street yet
-      lineChart.data.datasets[1].label = ''; // empty → legend filter hides it
+      lineChart.data.datasets[1].label = ""; // empty → legend filter hides it
+
+      // Add background area dataset if we found 2023-1
+      if (grayStartIndex >= 0) {
+        lineChart.data.datasets.push({
+          label: "",
+          data: backgroundData,
+          backgroundColor: "rgba(200, 200, 200, 0.3)",
+          borderColor: "transparent",
+          fill: "origin",
+          pointRadius: 0,
+          order: 3, // Behind other datasets
+          skipNull: true,
+        });
+      }
+
       lineChart.update();
     } catch (err) {
-      console.warn('[heatmaps] CSV load error:', err);
+      console.warn("[heatmaps] CSV load error:", err);
     }
   })();
 
@@ -255,68 +303,74 @@ export function chartHeatmaps(container /* d3 not required */) {
     const aligned = seriesByStreet.get(key);
 
     // Dataset[1] is the street overlay (blue), Dataset[0] is the average (red)
-    if (aligned && aligned.length === lineChart.data.labels.length && aligned.some(v => v != null)) {
-      lineChart.data.datasets[1].label = street || 'Strada selezionata';
+    if (
+      aligned &&
+      aligned.length === lineChart.data.labels.length &&
+      aligned.some((v) => v != null)
+    ) {
+      lineChart.data.datasets[1].label = street || "Strada selezionata";
       lineChart.data.datasets[1].data = aligned;
     } else {
       // CLEAR the street-specific line and hide it from legend via filter
-      lineChart.data.datasets[1].label = '';
-      lineChart.data.datasets[1].data = new Array(lineChart.data.labels.length).fill(null);
+      lineChart.data.datasets[1].label = "";
+      lineChart.data.datasets[1].data = new Array(
+        lineChart.data.labels.length
+      ).fill(null);
     }
 
     try {
       lineChart.update();
     } catch (e) {
-      console.warn('[heatmaps] chart update failed', e);
+      console.warn("[heatmaps] chart update failed", e);
     }
 
     // Optional: reflect selection in panel text
-    const text = panel.querySelector('#text-content');
+    const text = panel.querySelector("#text-content");
     if (text) {
       text.textContent = lineChart.data.datasets[1].label
         ? `Selezionata: ${street}`
-        : 'Nessuna strada selezionata o dati non disponibili';
+        : "Nessuna strada selezionata o dati non disponibili";
     }
   };
-  window.addEventListener('message', onMessage);
+  window.addEventListener("message", onMessage);
 
   // 7) Map/year toggles (buttons + frames). Add "active" to the pressed year button.
-  const mapButtons = panel.querySelectorAll('.map-selector [data-map]');
-  const mapFrames = panel.querySelectorAll('.map-frame');
+  const mapButtons = panel.querySelectorAll(".map-selector [data-map]");
+  const mapFrames = panel.querySelectorAll(".map-frame");
 
   const onMapClick = (e) => {
     const btn = e.currentTarget;
-    const id = btn.getAttribute('data-map');
+    const id = btn.getAttribute("data-map");
 
     // Toggle button states
     mapButtons.forEach((b) => {
       const isActive = b === btn;
-      b.classList.toggle('active', isActive);
-      b.toggleAttribute('aria-pressed', isActive);
+      b.classList.toggle("active", isActive);
+      b.toggleAttribute("aria-pressed", isActive);
     });
 
     // Toggle visible iframe
-    mapFrames.forEach((f) => f.classList.toggle('active', f.id === id));
+    mapFrames.forEach((f) => f.classList.toggle("active", f.id === id));
 
     // Optional: update <figcaption> with the selected year text
-    const cap = panel.querySelector('figure .caption');
+    const cap = panel.querySelector("figure .caption");
     if (cap) {
       const label = btn.textContent.trim();
       cap.textContent = `› ${label} ‹`;
     }
   };
 
-  mapButtons.forEach((b) => b.addEventListener('click', onMapClick));
+  mapButtons.forEach((b) => b.addEventListener("click", onMapClick));
 
   // 8) Lifecycle for carousel/unmount
   return {
     dispose() {
       aborted = true;
-      window.removeEventListener('message', onMessage);
-      mapButtons.forEach((b) => b.removeEventListener('click', onMapClick));
+      window.removeEventListener("message", onMessage);
+      mapButtons.forEach((b) => b.removeEventListener("click", onMapClick));
       try {
         lineChart?.destroy();
       } catch {}
-    }
+    },
   };
 }
