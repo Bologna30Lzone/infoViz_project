@@ -434,6 +434,17 @@ body {
   display: block;
 }
 
+.content2 {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
+}
+
+#chart-text {
+  width: 50%;
+}
+
 .info-container {
   display: flex;
   flex-direction: column;
