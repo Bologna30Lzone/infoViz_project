@@ -23,6 +23,9 @@ body {
   font-size: 1.5rem;
 }
 
+ul, li {color: var(--grey);}
+ul li::marker {color: var(--red);}
+
 .graph-button {
   background-color: var(--white);
   padding: 2px 5px;
