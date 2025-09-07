@@ -174,7 +174,7 @@ body {
   height: 1em
 }
 
-.headline .accent {
+.accent {
   color: var(--red);
 }
 
@@ -440,8 +440,6 @@ body {
 }
 
 #chart-text {
-  display: flex;
-  justify-content: center;
   width: 30%;
 }
 
