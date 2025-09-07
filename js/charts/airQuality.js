@@ -171,39 +171,37 @@ export function chartAirQuality(container, d3) {
   }
 
   function draw2024Line(xScale, chartType = "time") {
-    // Remove any existing 2024 line
+    // Remove any existing 2024 elements
     g.selectAll(".zona30-line").remove();
     g.selectAll(".zona30-label").remove();
+    g.selectAll(".zona30-area").remove();
 
-    let x2024;
-    if (chartType === "time") {
-      x2024 = xScale(new Date(2024, 0, 1));
-    } else if (chartType === "band") {
-      x2024 = xScale(2024) + xScale.bandwidth() / 2;
-    }
+    const x2023 = xScale(new Date(2023, 2, 0));
 
-    if (x2024 !== undefined && x2024 >= 0 && x2024 <= w) {
-      // Draw vertical line
-      const line = g
-        .append("line")
-        .attr("class", "zona30-line")
-        .attr("x1", x2024)
-        .attr("x2", x2024)
-        .attr("y1", 0)
-        .attr("y2", h);
+    if (x2023 !== undefined && x2023 >= 0 && x2023 <= w) {
+      // Create a rectangle covering the area from 2024 to the right edge
+      g.append("rect")
+        .attr("class", "zona30-area")
+        .attr("x", x2023)
+        .attr("y", 0)
+        .attr("width", w - x2023) // From marker to right edge
+        .attr("height", h)
+        .attr("fill", "rgba(200, 200, 200, 0.3)") // Light gray with transparency
+        .attr("stroke", "none")
+        .lower(); // Put it behind the data lines
 
-      // Move line behind other elements
-      line.lower();
-
-      // Add label
+      // Add label at the left edge of the colored area
       const label = g
         .append("text")
         .attr("class", "zona30-label")
-        .attr("x", x2024 + 4)
+        .attr("x", x2023 + 4)
         .attr("y", h - 10)
+        .style("font-size", "12px")
+        .style("font-weight", "bold")
+        .attr("fill", "#f3f4f6")
         .text("Città 30");
 
-      // Move label behind other elements too
+      // Keep label visible above other elements
       label.raise();
     }
   }
