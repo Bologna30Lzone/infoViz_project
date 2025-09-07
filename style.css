@@ -23,9 +23,9 @@ body {
   font-size: 1.5rem;
 }
 
-ul,
+p, ul,
 li {
-  color: var(--grey);
+  color: var(--blue);
 }
 
 ul li::marker {
@@ -199,7 +199,7 @@ ul li::marker {
   color: var(--red);
 }
 
-p .accent {
+p.accent, li .accent {
   font-weight: 700;
 }
 
@@ -282,7 +282,7 @@ p .accent {
 
 .panel.home p,
 .panel.end p {
-  color: var(--grey);
+  color: var(--blue);
 }
 
 .sr-only {
