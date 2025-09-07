@@ -415,6 +415,10 @@ body {
   width: 50%;
 }
 
+#map-text p {
+  margin: 2rem auto;
+}
+
 .map-selector {
   margin: 0.5rem auto;
   display: flex;
@@ -460,6 +464,9 @@ body {
 }
 
 #chart-text {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   width: 30%;
 }
 
@@ -473,6 +480,10 @@ body {
 
 .q1 p {
   margin: 0.1rem auto;
+}
+
+.intro {
+  height: 5vh
 }
 
 .content {
