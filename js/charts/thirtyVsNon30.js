@@ -50,13 +50,13 @@ export function chartThirtyVsNon30(container) {
             {
               label: "Cars",
               data: data.cars,
-              backgroundColor: "rgba(54, 162, 235, 0.7)",
+              backgroundColor: "rgba(0, 145, 110, 0.7)",
               borderWidth: 0
             },
             {
               label: "Bikes",
               data: data.bikes,
-              backgroundColor: "rgba(255, 99, 132, 0.7)",
+              backgroundColor: "rgba(243, 182, 31, 0.7)",
               borderWidth: 0
             }
           ]
