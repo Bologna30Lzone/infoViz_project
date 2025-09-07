@@ -241,7 +241,15 @@ body {
 }
 
 /* Home / End */
-.panel.home,
+.panel.home {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+  text-align: left;
+}
+
 .panel.end {
   display: flex;
   align-items: center;
@@ -465,10 +473,6 @@ body {
 
 .q1 p {
   margin: 0.1rem auto;
-}
-
-.intro {
-  height: 5vh
 }
 
 .content {

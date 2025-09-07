@@ -34,21 +34,27 @@
     <div class="track" id="track">
       <!-- HOME -->
       <section class="panel home" data-label="HOME" data-module="none">
-        <div class="container my-5">
-          <div class="row mt-0">
-            <div class="col-12 kicker text-left mb-5">HOME</div>
-          </div>
-
-          <div class="row mb-4 text-left">
-            <div class="col-md-12 mb-3">
-              <div class="headline"><span class="accent">Città30</span> trough data</div>
+        <div class="intro">
+          <div class="container my-5">
+            <div class="row mt-0">
+              <div class="col-12 kicker text-left mb-5">HOME</div>
             </div>
-            <div class="col-md-12 mb-5">
-              <p>How has the city of Bologna changed with the new limits?</p>
+
+            <div class="row mb-4 text-left">
+              <div class="col-md-12 mb-3">
+
+                <div class="headline"><span class="accent">Città30</span> trough data</div>
+              </div>
+              <div class="col-md-12 mb-5">
+                <p>How has the city of Bologna changed with the new limits?</p>
+              </div>
             </div>
           </div>
+        </div>
 
+        <div class="content">
           <div class="row mt-5">
+
             <div class="col-md-4">
               <div class="headline mt-0"><span class="accent">Bologna</span> is changing</div>
             </div>
@@ -77,6 +83,7 @@
             </div>
           </div>
         </div>
+
 
       </section>
 
@@ -117,11 +124,13 @@
                   observed a decline in 8% of car traffic in the year 2024.</p>
               </div>
             </div>
-            
+
             <div class="content2">
               <div id="chart-text">
-                <h3><span class="accent" style="font-size: 10rem;">5%</span> <span style="font-size: 5rem; line-height: 0;">decrease</span></h3>
-                <p>Available data only shows a decrease of <strong>3.2%</strong> in 2024 and <strong>5%</strong> up to June 2025 (<span class="accent">in contrast to the 8%</span> reported by the official website).</p>
+                <h3><span class="accent" style="font-size: 10rem;">5%</span> <span
+                    style="font-size: 5rem; line-height: 0;">decrease</span></h3>
+                <p>Available data only shows a decrease of <strong>3.2%</strong> in 2024 and <strong>5%</strong> up to
+                  June 2025 (<span class="accent">in contrast to the 8%</span> reported by the official website).</p>
               </div>
               <div class="chart-block">
                 <canvas id="streetChart"></canvas>
@@ -170,17 +179,20 @@
           <div class="container mt-5">
             <div class="row mt-5">
               <div class="col-md-4">
-                <p>Since now, we analyzed measures on a temporal account, but another significant information to register is
+                <p>Since now, we analyzed measures on a temporal account, but another significant information to
+                  register is
                   the difference in trends between 30-only zones and 50-or-above ones during 2024.
                   In the latter, both bike and car average traffic is significantly higher (almost 50% more for cars and
-                  100% more for bikes), revealing that the inner part of the city has been impacted positively in respect to
+                  100% more for bikes), revealing that the inner part of the city has been impacted positively in
+                  respect to
                   streets that have limit equal to or greater than 50.
                 </p>
               </div>
               <div class="col-md-8">
                 <figure>
                   <div class="charts-grid">
-                    <div class="chart" data-type="30-vs-non30" data-csv-url="data/df_30vsnon30.csv" style="height: 70vh">
+                    <div class="chart" data-type="30-vs-non30" data-csv-url="data/df_30vsnon30.csv"
+                      style="height: 70vh">
                     </div>
                   </div>
                 </figure>
