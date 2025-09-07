@@ -136,11 +136,12 @@ export function chartHeatmaps(container /* d3 not required */) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: { mode: "nearest", intersect: false },
+      interaction: { mode: "none" }, // Disable all interactions
       plugins: {
         legend: {
           display: true,
           labels: {
+            color: "#000831",
             // Hide the street-specific dataset from legend when it has only nulls or empty label
             // Also hide background area dataset
             filter: function (legendItem, chartData) {
@@ -154,21 +155,7 @@ export function chartHeatmaps(container /* d3 not required */) {
           },
         },
         tooltip: {
-          mode: "index",
-          intersect: false,
-          callbacks: {
-            // Show "YYYY-H1/H2" as the tooltip title
-            title: (items) => {
-              const raw = items?.[0]?.label ?? "";
-              return formatHalfLabel(raw);
-            },
-            // Dataset label + localized value
-            label: (ctx) => {
-              const ds = ctx.dataset?.label ?? "";
-              const y = ctx.parsed?.y;
-              return `${ds}: ${y != null ? y.toLocaleString("it-IT") : "—"}`;
-            },
-          },
+          enabled: false, // Disable tooltips
         },
       },
       scales: {
@@ -176,13 +163,19 @@ export function chartHeatmaps(container /* d3 not required */) {
           // Keep axis labels as-is; hide long ones if needed
           ticks: {
             autoSkip: true,
+            color: "#000831",
             callback: function (value) {
               const labels = this.chart?.data?.labels || [];
               const raw = String(labels[value] ?? "");
               return raw.length >= 5 ? "" : raw; // hide labels with 5+ characters
             },
           },
-          grid: { display: false },
+          grid: {
+            display: true,
+            drawOnChartArea: false, // Don't draw grid lines across the chart
+            tickLength: 5,
+            tickColor: "#000831",
+          },
           border: { color: "#000831" },
         },
         y: {
@@ -192,11 +185,17 @@ export function chartHeatmaps(container /* d3 not required */) {
           // max: fixedYMax,
           ticks: {
             // stepSize: fixedYStep,
+            color: "#000831",
             callback: function (val) {
               return Number.isFinite(val) ? val : val;
             },
           },
-          grid: { display: false },
+          grid: {
+            display: true,
+            drawOnChartArea: false, // Don't draw grid lines across the chart
+            tickLength: 5,
+            tickColor: "#000831",
+          },
           border: { color: "#000831" },
         },
       },
