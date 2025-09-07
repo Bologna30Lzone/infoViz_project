@@ -5,8 +5,7 @@
 // cars30,bikes30,carsAbove30,bikesAbove30
 // 123,456,78,90
 
-export function chartThirtyVsNon30(container /* d3 not required */) {
-  // Early bail if Chart.js is missing
+export function chartThirtyVsNon30(container) {
   if (typeof Chart === "undefined") {
     container.textContent = "Chart.js not loaded";
     return { dispose() {} };
@@ -14,13 +13,12 @@ export function chartThirtyVsNon30(container /* d3 not required */) {
 
   const csvUrl = container.dataset.csvUrl || "data/df_30vsnon30.csv";
 
-  // Create a canvas we can clean up later
   const canvas = document.createElement("canvas");
   canvas.style.width = "100%";
   canvas.style.height = "100%";
   container.appendChild(canvas);
 
-  let chart; // will hold the Chart.js instance
+  let chart;
   let aborted = false;
 
   async function loadCSV(url) {
@@ -28,12 +26,14 @@ export function chartThirtyVsNon30(container /* d3 not required */) {
     const text = await res.text();
     const lines = text.trim().split(/\r?\n/);
     if (!lines.length) throw new Error("Empty CSV");
-    // Remove header (assumes first line header)
-    const header = lines.shift();
-    // Parse first data row (fallback to zeros if missing)
+    lines.shift(); // rimuove header
     const row = (lines[0] || "").split(",").map(v => Number(v.trim()));
     const [cars30=0, bikes30=0, carsAbove30=0, bikesAbove30=0] = row;
-    return [cars30, bikes30, carsAbove30, bikesAbove30];
+
+    return {
+      cars: [cars30, carsAbove30],
+      bikes: [bikes30, bikesAbove30]
+    };
   }
 
   async function draw() {
@@ -45,36 +45,38 @@ export function chartThirtyVsNon30(container /* d3 not required */) {
       chart = new Chart(ctx, {
         type: "bar",
         data: {
-          labels: [
-            "Cars (≤ 30 km/h)",
-            "Bikes (≤ 30 km/h)",
-            "Cars (> 30 km/h)",
-            "Bikes (> 30 km/h)"
-          ],
-          datasets: [{
-            label: "Traffico medio",
-            data,
-            backgroundColor: [
-              "rgba(54, 162, 235, 0.7)",
-              "rgba(255, 99, 132, 0.7)",
-              "rgba(54, 162, 235, 0.7)",
-              "rgba(255, 99, 132, 0.7)"
-            ],
-            borderWidth: 0
-          }]
+          labels: ["30-only zone", "50-or-above zone"],
+          datasets: [
+            {
+              label: "Cars",
+              data: data.cars,
+              backgroundColor: "rgba(54, 162, 235, 0.7)",
+              borderWidth: 0
+            },
+            {
+              label: "Bikes",
+              data: data.bikes,
+              backgroundColor: "rgba(255, 99, 132, 0.7)",
+              borderWidth: 0
+            }
+          ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { display: false },
+            legend: { display: true, position: "top" },
             tooltip: { mode: "index", intersect: false }
           },
           scales: {
-            x: { ticks: { autoSkip: false } },
+            x: {
+              ticks: { autoSkip: false },
+              grid: { display: false } // rimuove griglia sull'asse X
+            },
             y: {
               beginAtZero: true,
-              ticks: { precision: 0 }
+              ticks: { precision: 0 },
+              grid: { display: false } // rimuove griglia sull'asse Y
             }
           }
         }
