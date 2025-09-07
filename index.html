@@ -10,12 +10,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
   <!-- Styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -174,8 +171,8 @@
 
           <div class="content mt-5">
             <div class="row mt-5">
-              <div class="col-md-4">
-                <h3>30-zones vs non-30-zones</h3>
+              <div class="col-md-4 margintop">
+                <h3><strong>30-zones vs non-30-zones</strong></h3>
                 <p>Since now, we analyzed measures on a temporal account, but another significant information to
                   register is
                   the difference in trends between 30-only zones and 50-or-above ones during 2024.</p>
@@ -219,7 +216,7 @@
               <div class="chart" data-type="air-quality" data-gas-url="data/gases.json" style="height:40vh"></div>
               <div id="air-text">
 
-                <h3>Air Quality</h3>
+                <h3><strong>Impact on Air Pollution</strong></h3>
                 <p>We evaluated the effects of the new policy on air quality using data from two monitoring
                   stations near Bologna’s center: Porta San Felice and Giardini Margherita. These <span class="accent">stations measure
                   several gases and their emissions over time, each compared to EU and WHO threshold</span>.
@@ -238,11 +235,11 @@
 
             <figure class="figure wide-chart chart-right">
               <div id="ev-text">
-                <h3>Electric Vehicle Usage</h3>
+                <h3><strong>Irrelevant Electric Vehicles presence</strong></h3>
                 <p>We also wanted to explore if there was some correlation between the change of air quality and the
-                  growth of electric car vehicles. While it is true that the growth is of car vehicle show a positive
+                  growth of electric car vehicles. While it is true that their growth in usage among the population shows a positive
                   trend (+1% from 2019), <span class="accent">the percentage over the the total count of cars is too little to have any
-                  significant impact</span>. </p>
+                  significant impact on data</span>. </p>
               </div>
               <div class="chart" data-type="ev-share" data-ev-url="data/electric.csv" style="height:30vh"></div>
             </figure>

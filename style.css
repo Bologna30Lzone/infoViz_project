@@ -564,10 +564,6 @@ p .accent, li .accent {
   margin-bottom: 1rem;
 }
 
-.content#end {
-  margin-top: 2rem;
-}
-
 /* End-section card layout (plays nice with Bootstrap) */
 .conclusion-cards .card {
   background: var(--light-grey);
@@ -668,4 +664,12 @@ p .accent, li .accent {
   flex-direction: column;
   gap: 2rem;
   justify-content: center;
+}
+
+.mt-5, .my-5 {
+  margin-top: 0 !important;
+}
+
+.margintop {
+  margin-top: 2rem;
 }
