@@ -23,8 +23,14 @@ body {
   font-size: 1.5rem;
 }
 
-ul, li {color: var(--grey);}
-ul li::marker {color: var(--red);}
+ul,
+li {
+  color: var(--grey);
+}
+
+ul li::marker {
+  color: var(--red);
+}
 
 .graph-button {
   background-color: var(--white);
@@ -485,10 +491,6 @@ ul li::marker {color: var(--red);}
   margin: 0.1rem auto;
 }
 
-.intro {
-  height: 5vh
-}
-
 .content {
   height: 95vh;
 }
@@ -530,4 +532,9 @@ ul li::marker {color: var(--red);}
   display: flex;
   padding: 2rem;
   align-items: flex-start;
+}
+
+.title {
+  font-size: 5.5rem;
+  margin-bottom: 1rem;
 }
