@@ -23,8 +23,14 @@ body {
   font-size: 1.5rem;
 }
 
-ul, li {color: var(--grey);}
-ul li::marker {color: var(--red);}
+ul,
+li {
+  color: var(--grey);
+}
+
+ul li::marker {
+  color: var(--red);
+}
 
 .graph-button {
   background-color: var(--white);
@@ -244,7 +250,15 @@ ul li::marker {color: var(--red);}
 }
 
 /* Home / End */
-.panel.home,
+.panel.home {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+  text-align: left;
+}
+
 .panel.end {
   display: flex;
   align-items: center;
@@ -473,8 +487,8 @@ ul li::marker {color: var(--red);}
   width: 70%;
 }
 
-.intro {
-  height: 5vh
+.q1 p {
+  margin: 0.1rem auto;
 }
 
 .content {
@@ -518,4 +532,9 @@ ul li::marker {color: var(--red);}
   display: flex;
   padding: 2rem;
   align-items: flex-start;
+}
+
+.title {
+  font-size: 5.5rem;
+  margin-bottom: 1rem;
 }
