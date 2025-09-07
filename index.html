@@ -85,15 +85,6 @@
         <div class="panel-inner">
           <div class="kicker">QUESTION ONE</div>
           <div class="headline"><span class="accent">Before</span> and After 30-Zone</div>
-          <!--<div class="map-selector">
-            <button data-map="map1">2019</button>
-            <button data-map="map2">2020</button>
-            <button data-map="map3">2021</button>
-            <button data-map="map4">2022</button>
-            <button data-map="map5">2023</button>
-            <button data-map="map6">2024</button>
-            <button data-map="map7">2025</button>
-          </div>-->
           <div class="content">
             <p>In this section, we analyze car-related traffic on a spatial and temporal account. Heatmaps show areas
               with intense traffic, allowing to see which streets are most affected by it and compare them.
@@ -103,25 +94,25 @@
 
             <div class="chart" data-type="heatmaps">
               <figure class="figure">
-                <div class="map-container">
+                <div class="map-container" style="height: 30vh;">
                   <iframe class="map-frame" id="map1" src="./maps/heatmapVie2019.html"></iframe>
                   <iframe class="map-frame" id="map2" src="./maps/heatmapVie2020.html"></iframe>
                   <iframe class="map-frame" id="map3" src="./maps/heatmapVie2021.html"></iframe>
                   <iframe class="map-frame" id="map4" src="./maps/heatmapVie2022.html"></iframe>
                   <iframe class="map-frame" id="map5" src="./maps/heatmapVie2023.html"></iframe>
                   <iframe class="map-frame" id="map6" src="./maps/heatmapVie2024.html"></iframe>
-                  <iframe class="map-frame" id="map7" src="./maps/heatmapVie2025.html"></iframe>
+                  <iframe class="map-frame active" id="map7" src="./maps/heatmapVie2025.html"></iframe>
                 </div>
-                <figcaption class="caption">› 2022 ‹</figcaption>
+                <figcaption class="caption"></figcaption>
               </figure>
               <div class="map-selector">
-                <button id="2019" data-map="map1">2019</button>
-                <button id="2020" data-map="map2">2020</button>
-                <button id="2021" data-map="map3">2021</button>
-                <button id="2022" data-map="map4">2022</button>
-                <button id="2023" data-map="map5">2023</button>
-                <button id="2024" data-map="map6">2024</button>
-                <button id="2025" data-map="map7">2025</button>
+                <button id="2019" data-map="map1" class="graph-button">2019</button>
+                <button id="2020" data-map="map2" class="graph-button">2020</button>
+                <button id="2021" data-map="map3" class="graph-button">2021</button>
+                <button id="2022" data-map="map4" class="graph-button">2022</button>
+                <button id="2023" data-map="map5" class="graph-button">2023</button>
+                <button id="2024" data-map="map6" class="graph-button">2024</button>
+                <button id="2025" data-map="map7" class="graph-button active">2025</button>
               </div>
             </div>
             <div class="content2">
