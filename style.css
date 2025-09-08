@@ -699,3 +699,65 @@ li .accent {
     display: block;
   }
 }
+
+
+/* Credits: force 3 cards on one line, cap height */
+.conclusion-cards {
+  display: flex;
+  gap: var(--gap, 1rem);
+  flex-wrap: nowrap;              /* keep them on one line */
+  overflow-x: auto;               /* allow horizontal scroll on small screens */
+  -webkit-overflow-scrolling: touch;
+}
+
+.conclusion-cards .card {
+  flex: 0 0 calc((100% - 2 * var(--gap, 1rem)) / 3); /* 3 equal columns */
+  max-height: 240px;             /* cap card height */
+  overflow: hidden;              /* hide overflow (clean look) */
+  display: flex;
+  flex-direction: column;
+}
+
+.conclusion-cards .card-title {
+  margin-bottom: 0.5rem;
+}
+
+.conclusion-cards .card-text {
+  /* keep text from making the card huge */
+  max-height: 8.5rem;             /* adjust as needed */
+  line-height: 1.3;
+}
+
+/* Credits cards layout */
+.conclusion-cards {
+  display: flex;
+  gap: var(--gap, 1rem);
+  flex-wrap: nowrap;        /* keep them on one row */
+  overflow-x: auto;         /* allow scroll on very small screens */
+  -webkit-overflow-scrolling: touch;
+}
+
+.conclusion-cards .card {
+  flex: 0 0 calc((100% - 2 * var(--gap, 1rem)) / 3); /* 3 columns */
+  max-height: 260px;
+  display: flex;
+  flex-direction: column;   /* stack title, text, github vertically */
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.conclusion-cards .card-title {
+  margin-bottom: 0.5rem;
+}
+
+.conclusion-cards .card-text {
+  flex-grow: 1;             /* fill remaining space */
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.conclusion-cards .card-github {
+  margin-top: auto;         /* push to bottom */
+  font-size: 1.5rem;
+  padding: 1.5rem;
+}
