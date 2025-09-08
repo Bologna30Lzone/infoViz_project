@@ -23,7 +23,8 @@ body {
   font-size: 1.5rem;
 }
 
-p, ul,
+p,
+ul,
 li {
   color: var(--blue);
 }
@@ -199,7 +200,8 @@ ul li::marker {
   color: var(--red);
 }
 
-p .accent, li .accent {
+p .accent,
+li .accent {
   font-weight: 700;
 }
 
@@ -220,7 +222,7 @@ p .accent, li .accent {
   display: grid;
   grid-template-columns: auto auto;
   /* content-based widths; use 1fr 1fr for equal split */
-  gap: 3rem;
+  gap: 1rem;
   align-items: stretch;
 }
 
@@ -378,13 +380,7 @@ p .accent, li .accent {
   grid-column: 1 / -1;
 }
 
-/* default .figure (keep your existing rules) */
-.figure {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  /* equal split by default */
-  gap: 30px;
-}
+
 
 /* modifier when you want the chart bigger */
 .figure.wide-chart {
@@ -540,7 +536,7 @@ p .accent, li .accent {
   flex-direction: column;
   height: 90vh;
   overflow: hidden;
-  gap: 1rem;
+  gap: 0rem;
   /* Add gap between chart and text */
 }
 
@@ -555,7 +551,7 @@ p .accent, li .accent {
   /* Set specific height instead of 100% */
   width: 100%;
   display: flex;
-  padding: 2rem;
+  padding: 0.5rem;
   align-items: flex-start;
 }
 
@@ -584,14 +580,16 @@ p .accent, li .accent {
 /* Conclusion cards */
 .conclusion-cards {
   margin-top: 2rem;
-  gap: 2rem; /* space between rows */
+  gap: 2rem;
+  /* space between rows */
 }
 
 .conclusion-cards .card {
   background: var(--white);
   border: 1px solid rgba(0, 8, 49, 0.12);
   border-radius: 12px;
-  overflow: hidden; /* so header color stays flush */
+  overflow: hidden;
+  /* so header color stays flush */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -607,8 +605,9 @@ p .accent, li .accent {
   font-weight: 700;
   font-size: 1.7rem;
   padding: 1rem 1.5rem;
-  margin: -1rem -1.5rem 1.5rem -1.5rem; /* stretch full width of card */
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  margin: -1rem -1.5rem 1.5rem -1.5rem;
+  /* stretch full width of card */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .conclusion-cards .card-text {
@@ -621,17 +620,19 @@ p .accent, li .accent {
 .conclusion-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem; /* space between cards */
+  gap: 1.5rem;
+  /* space between cards */
   margin: 2rem auto;
 }
 
 .conclusion-cards .card {
-  flex: 1 1 calc(50% - 2rem); /* two per row on wide screens */
+  flex: 1 1 calc(50% - 2rem);
+  /* two per row on wide screens */
   background: var(--white);
   border: 1px solid rgba(0, 8, 49, 0.12);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
@@ -639,7 +640,7 @@ p .accent, li .accent {
 
 .conclusion-cards .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .conclusion-cards .card-title {
@@ -666,7 +667,8 @@ p .accent, li .accent {
   justify-content: center;
 }
 
-.mt-5, .my-5 {
+.mt-5,
+.my-5 {
   margin-top: 0 !important;
 }
 

@@ -187,7 +187,7 @@ export function chartHeatmaps(container /* d3 not required */) {
             // stepSize: fixedYStep,
             color: "#000831",
             callback: function (val) {
-              return Number.isFinite(val) ? val : val;
+              return Number.isFinite(val) ? val.toLocaleString("en-US") : val;
             },
           },
           grid: {
