@@ -8,10 +8,9 @@
 // CSV expected at ./data/flusso_per_html_veicoli_per_trimestri.csv  (overridable via data-flow-url)
 // Columns used: stname, order, label ("YYYY-1"/"YYYY-2"), period (1/2), tot_day (number)
 
-export function chartHeatmaps(container /* d3 not required */) {
+export function chartHeatmaps(container) {
   const panel = container.closest(".panel") || document;
 
-  // 1) Target the pre-existing canvas
   const lineCanvas = panel.querySelector("#streetChart");
   if (!lineCanvas) {
     console.warn("[heatmaps] #streetChart canvas not found in this panel");
@@ -19,12 +18,10 @@ export function chartHeatmaps(container /* d3 not required */) {
   }
   if (!lineCanvas.style.height) lineCanvas.style.height = "36vh";
 
-  // 2) Data URL (can be overridden by data-flow-url on the container)
   const flowURL =
     container.dataset.flowUrl ||
     "./data/flusso_per_html_veicoli_per_trimestri.csv";
 
-  // 3) Helpers
   const norm = (s) =>
     String(s || "")
       .normalize("NFD")
@@ -32,7 +29,6 @@ export function chartHeatmaps(container /* d3 not required */) {
       .toLowerCase()
       .trim();
 
-  // “nice” ceiling to 1–2–2.5–5–10 × 10^k
   function niceCeil(value) {
     if (!Number.isFinite(value) || value <= 0) return 1;
     const exp = Math.floor(Math.log10(value));
@@ -170,7 +166,7 @@ export function chartHeatmaps(container /* d3 not required */) {
           ticks: {
             color: "#000831",
             callback: function (val) {
-              return Number.isFinite(val) ? val.toLocaleString("en-US") : val;
+              return Number.isFinite(val) ? val : val;
             },
           },
           grid: {
