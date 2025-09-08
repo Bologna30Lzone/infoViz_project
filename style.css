@@ -555,10 +555,7 @@ li .accent {
   align-items: flex-start;
 }
 
-.title {
-  font-size: 5.5rem;
-  margin-bottom: 1rem;
-}
+
 
 /* End-section card layout (plays nice with Bootstrap) */
 .conclusion-cards .card {

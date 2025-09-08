@@ -66,6 +66,21 @@ export function chartThirtyVsNon30(container) {
           maintainAspectRatio: false,
           interaction: { mode: "none" }, // Disable all interactions
           plugins: {
+            title: {
+              display: true,
+              text: "Traffic Comparison: 30-Zone vs 50+ Zone",
+              color: "#000831",
+              font: {
+                size: 16,
+                weight: "bold",
+                family:
+                  "IBM Plex Mono, ui-monospace, SFMono-Regular, Menlo, monospace",
+              },
+              padding: {
+                top: 10,
+                bottom: 0,
+              },
+            },
             legend: { display: true, position: "top" },
             tooltip: { enabled: false }, // Disable tooltips
           },

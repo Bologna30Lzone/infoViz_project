@@ -21,6 +21,17 @@ export function chartBikeLine(container, d3) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
+  // Add title
+  g.append("text")
+    .attr("class", "chart-title")
+    .attr("x", w / 2)
+    .attr("y", -5)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("font-weight", "bold")
+    .style("fill", "#000831")
+    .text("Semi-annual average bike traffic");
+
   const parseDate = d3.timeParse("%Y-%m-%d");
   const selectedStations = new Set(["Ercolani", "Sabotino", "San Donato"]);
   const startDate = parseDate("2019-01-01");

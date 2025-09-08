@@ -62,24 +62,18 @@ export function chartAirQuality(container, d3) {
   container.style.position = "relative";
 
   const { width, height } = sizeOf(container, 760, 380);
-  const margin = { top: 28, right: 24, bottom: 42, left: 52 };
+  const margin = { top: 60, right: 24, bottom: 42, left: 52 }; // Increased top margin for title and legend
   const w = width - margin.left - margin.right;
   const h = height - margin.top - margin.bottom;
-
-  // Create legend above the graph
-  const legend = root
-    .append("div")
-    .style("display", "grid")
-    .style("grid-auto-flow", "column")
-    .style("gap", "14px")
-    .style("justify-content", "end")
-    .style("margin-bottom", "8px");
 
   // FIX: makeSVG returns a selection, so append on it directly
   const svg = makeSVG(d3, container, width, height);
   const g = svg
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // Create legend group inside the SVG, positioned under the title
+  const legend = g.append("g").attr("class", "legend-group");
 
   const gx = g
     .append("g")
@@ -106,19 +100,34 @@ export function chartAirQuality(container, d3) {
 
   function drawLegend(stations) {
     legend.selectAll("*").remove();
-    stations.forEach((s) => {
-      const row = legend
-        .append("div")
-        .style("display", "grid")
-        .style("grid-auto-flow", "column")
-        .style("align-items", "center")
-        .style("gap", "6px");
-      row
-        .append("span")
-        .style("width", "18px")
-        .style("height", "3px")
-        .style("background", COLORS[s] || "#333");
-      row.append("span").style("font-size", "12px").text(s);
+
+    const legendY = -25; // Position below title
+    const itemWidth = 170; // Increased spacing between legend items
+    let legendX = w / 2 - (stations.length * itemWidth) / 2; // Center the legend
+
+    stations.forEach((station, i) => {
+      const legendGroup = legend
+        .append("g")
+        .attr("transform", `translate(${legendX + i * itemWidth}, ${legendY})`);
+
+      // Draw line
+      legendGroup
+        .append("line")
+        .attr("x1", 0)
+        .attr("x2", 18)
+        .attr("y1", 0)
+        .attr("y2", 0)
+        .attr("stroke", COLORS[station] || "#333")
+        .attr("stroke-width", 3);
+
+      // Add text
+      legendGroup
+        .append("text")
+        .attr("x", 22)
+        .attr("y", 4)
+        .style("font-size", "11px")
+        .style("fill", "#000831")
+        .text(station);
     });
   }
 
@@ -413,11 +422,11 @@ export function chartAirQuality(container, d3) {
   }
 
   function update(pollutant) {
-    g.selectAll(".title").remove();
+    g.selectAll(".graph-title").remove();
     g.append("text")
-      .attr("class", "title")
+      .attr("class", "graph-title")
       .attr("x", w / 2)
-      .attr("y", -8)
+      .attr("y", -40)
       .attr("text-anchor", "middle")
       .style("font-size", "15px")
       .style("font-weight", "bold")
