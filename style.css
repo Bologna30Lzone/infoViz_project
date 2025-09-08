@@ -23,6 +23,14 @@ body {
   font-size: 1.5rem;
 }
 
+h1 {
+  font-size: 5rem;
+}
+
+.title {
+  margin-bottom: 2.5rem;
+}
+
 p,
 ul,
 li {
