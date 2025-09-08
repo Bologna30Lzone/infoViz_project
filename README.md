@@ -1,7 +1,7 @@
 # infoViz_project
 
 ## Python Notebooks
-All python notebooks can be found in the `data-analisys/` directory
+All python notebooks can be found in the `data_analisys/` directory
 
 # website: 
 https://bologna30lzone.github.io/infoViz_project/
