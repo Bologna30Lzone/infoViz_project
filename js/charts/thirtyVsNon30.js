@@ -26,7 +26,7 @@ export function chartThirtyVsNon30(container) {
     const text = await res.text();
     const lines = text.trim().split(/\r?\n/);
     if (!lines.length) throw new Error("Empty CSV");
-    lines.shift(); // rimuove header
+    lines.shift();
     const row = (lines[0] || "").split(",").map((v) => Number(v.trim()));
     const [cars30 = 0, bikes30 = 0, carsAbove30 = 0, bikesAbove30 = 0] = row;
 
@@ -64,7 +64,7 @@ export function chartThirtyVsNon30(container) {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          interaction: { mode: "none" }, // Disable all interactions
+          interaction: { mode: "none" },
           plugins: {
             title: {
               display: true,
@@ -82,29 +82,29 @@ export function chartThirtyVsNon30(container) {
               },
             },
             legend: { display: true, position: "top" },
-            tooltip: { enabled: false }, // Disable tooltips
+            tooltip: { enabled: false },
           },
           scales: {
             x: {
               ticks: {
                 autoSkip: false,
-                color: "#000831", // axis tick color
+                color: "#000831",
               },
               border: {
-                color: "#000831", // axis line color
+                color: "#000831", 
               },
-              grid: { display: false }, // rimuove griglia sull'asse X
+              grid: { display: false },
             },
             y: {
               beginAtZero: true,
               ticks: {
                 precision: 0,
-                color: "#000831", // axis tick color
+                color: "#000831",
               },
               border: {
-                color: "#000831", // axis line color
+                color: "#000831",
               },
-              grid: { display: false }, // rimuove griglia sull'asse Y
+              grid: { display: false },
             },
           },
         },
