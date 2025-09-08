@@ -644,7 +644,7 @@ li .accent {
 }
 
 .conclusion-cards .card-title {
-  background: var(--grey);
+  background: var(--blue);
   color: var(--white);
   font-weight: 700;
   font-size: 1.7rem;
