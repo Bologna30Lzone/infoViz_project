@@ -672,3 +672,22 @@ li .accent {
 .margintop {
   margin-top: 2rem;
 }
+
+/* Hide the whole site on small screens, show only the message */
+#mobile-message {
+  display: none;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.5rem;
+  padding: 50px 20px;
+}
+
+/* For smartphones (adjust max-width if needed) */
+@media screen and (max-width: 768px) {
+  body > *:not(#mobile-message) {
+    display: none !important;
+  }
+  #mobile-message {
+    display: block;
+  }
+}
