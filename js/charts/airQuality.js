@@ -15,7 +15,7 @@ const gasInfo = {
   "CO (MONOSSIDO DI CARBONIO)":
     "<strong>CO (carbon monoxide)</strong> is a colorless, odorless gas from incomplete combustion that harms oxygen delivery in the body, and its levels have been <strong>decreasing</strong> every year.",
   "NO2 (BIOSSIDO DI AZOTO)":
-    "<strong>NO₂ (nitrogen dioxide)</strong> is a gas mainly produced by traffic and combustion processes, which can irritate the airways, worsen asthma, and contribute to smog and acid rain. Its levels have been gradually decreasing, but the introduction of Città 30 does not seem to have had a great effect.",
+    "<strong>NO₂ (nitrogen dioxide)</strong> is a gas mainly produced by traffic and combustion processes, which can irritate the airways, worsen asthma, and contribute to smog and acid rain. The introduction of Città 30 had a great impact on its reduction. ",
   "PM2.5":
     "<strong>PM2.5</strong> are fine particulate matter with a diameter of 2.5 micrometers or smaller, which can penetrate deep into the lungs and bloodstream, causing respiratory and cardiovascular problems. Their levels have been slowly decreasing, but the introduction of Città 30 appears to have had little impact.",
   "C6H6 (BENZENE)":
